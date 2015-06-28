@@ -1,0 +1,7 @@
+>Control AM Fan
+>Control RAMPS FAN
+>Control Extr Fan
+>/Interface inductive sensor
+>Fused Safety 
+> Control PSU
+

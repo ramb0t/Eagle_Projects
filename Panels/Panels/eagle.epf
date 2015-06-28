@@ -1,0 +1,51 @@
+[Eagle]
+Version="07 02 00"
+Platform="Linux"
+Serial="62191E841E-LSR-WLM-1EL"
+Globals="Globals"
+Desktop="Desktop"
+
+[Globals]
+AutoSaveProject=1
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/Adafruit/adafruit.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/Eagle-Libraries-master/adafruit.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/Eagle-Libraries-master/holes.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/Eagle-Libraries-master/pneumatic.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/Eagle-Libraries-master/rectifier.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/Eagle-Libraries-master/stepper.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/Eagle-Libraries-master/triac.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/Eagle-Libraries-master/valves2.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/Eagle-Libraries-master/varistor.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/RobThePyro/RobThePyro.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/Sparkfun/SparkFun.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/GeekAmmo.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/LilyPad-Wearables.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-Aesthetics.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-AnalogIC.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-Boards.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-Capacitors.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-Connectors.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-DigitalIC.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-DiscreteSemi.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-Displays.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-Electromechanical.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-FreqCtrl.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-LED.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-Passives.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-PowerIC.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-RF.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-Resistors.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-Retired.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/SparkFun-Sensors.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/SparkFun-Eagle-Libraries-master/User-Submitted.lbr"
+UsedLibrary="/mnt/Electron/Dropbox/Electronics/Eagle/Libaries/adafruit-Adafruit-Eagle-Library-2a72a48/adafruit.lbr"
+
+[Win_1]
+Type="Control Panel"
+Loc="766 326 1365 725"
+State=1
+Number=0
+
+[Desktop]
+Screen="1366 768"
+Window="Win_1"
