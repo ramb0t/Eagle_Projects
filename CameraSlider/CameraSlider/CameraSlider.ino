@@ -4,6 +4,10 @@
 
 #include <Arduino.h>
 #include "A4988.h"
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
 #define LEDR A1 //AVR 24 PC1
 #define LEDG A2 //AVR 25 PC2 
@@ -22,9 +26,10 @@
 #define SSTP 9  //AVR 13 PB1
 #define SEN 10  //AVR 14 PB2
 
-#define OLEDRST A0 //AVR 23 PC0
+#define OLED_RESET A0 //AVR 23 PC0
 #define SDA A4  //AVR 27 PC4
 #define SCL A5  //AVR 28 PC5
+Adafruit_SSD1306 display(OLED_RESET);
 
 // http://www.instructables.com/id/Improved-Arduino-Rotary-Encoder-Reading/?ALLSTEPS
 static int pinA = ENCA; // Our first hardware interrupt pin is digital pin 2
