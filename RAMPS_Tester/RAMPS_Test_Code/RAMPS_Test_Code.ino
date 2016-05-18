@@ -99,34 +99,33 @@ digitalWrite(FAN_PIN, HIGH);
   digitalWrite(E_DIR_PIN , HIGH);
   digitalWrite(Q_DIR_PIN , HIGH);
 
-      digitalWrite(X_STEP_PIN , HIGH);
+  digitalWrite(X_STEP_PIN , HIGH);
   digitalWrite(Y_STEP_PIN , HIGH);
   digitalWrite(Z_STEP_PIN , HIGH);
   digitalWrite(E_STEP_PIN , HIGH);
   digitalWrite(Q_STEP_PIN , HIGH); 
 
-  
-    digitalWrite(X_ENABLE_PIN , LOW);
-  digitalWrite(Y_ENABLE_PIN , LOW);
-  digitalWrite(Z_ENABLE_PIN , LOW);
-  digitalWrite(E_ENABLE_PIN , LOW);
-  digitalWrite(Q_ENABLE_PIN , LOW);
+  digitalWrite(X_ENABLE_PIN , HIGH);
+  digitalWrite(Y_ENABLE_PIN , HIGH);
+  digitalWrite(Z_ENABLE_PIN , HIGH);
+  digitalWrite(E_ENABLE_PIN , HIGH);
+  digitalWrite(Q_ENABLE_PIN , HIGH);
   }
   else {
-  digitalWrite(X_DIR_PIN , HIGH);
-  digitalWrite(Y_DIR_PIN , HIGH);
-  digitalWrite(Z_DIR_PIN , HIGH);
-  digitalWrite(E_DIR_PIN , HIGH);
-  digitalWrite(Q_DIR_PIN , HIGH);
+  digitalWrite(X_DIR_PIN , LOW);
+  digitalWrite(Y_DIR_PIN , LOW);
+  digitalWrite(Z_DIR_PIN , LOW);
+  digitalWrite(E_DIR_PIN , LOW);
+  digitalWrite(Q_DIR_PIN , LOW);
 
-      digitalWrite(X_STEP_PIN , HIGH);
-  digitalWrite(Y_STEP_PIN , HIGH);
-  digitalWrite(Z_STEP_PIN , HIGH);
-  digitalWrite(E_STEP_PIN , HIGH);
-  digitalWrite(Q_STEP_PIN , HIGH); 
+  digitalWrite(X_STEP_PIN , LOW);
+  digitalWrite(Y_STEP_PIN , LOW);
+  digitalWrite(Z_STEP_PIN , LOW);
+  digitalWrite(E_STEP_PIN , LOW);
+  digitalWrite(Q_STEP_PIN , LOW); 
 
   
-    digitalWrite(X_ENABLE_PIN , LOW);
+  digitalWrite(X_ENABLE_PIN , LOW);
   digitalWrite(Y_ENABLE_PIN , LOW);
   digitalWrite(Z_ENABLE_PIN , LOW);
   digitalWrite(E_ENABLE_PIN , LOW);
