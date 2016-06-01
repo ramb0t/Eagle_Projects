@@ -371,10 +371,11 @@ UsedLibrary="C:/Users/Ramb0t/Documents/Git/Eagle_Library/SparkFun-Eagle-Librarie
 UsedLibrary="C:/Users/Ramb0t/Documents/Git/Eagle_Library/SparkFun-Eagle-Libraries/SparkFun-Retired.lbr"
 UsedLibrary="C:/Users/Ramb0t/Documents/Git/Eagle_Library/SparkFun-Eagle-Libraries/SparkFun-Sensors.lbr"
 UsedLibrary="C:/Users/Ramb0t/Documents/Git/Eagle_Library/SparkFun-Eagle-Libraries/User-Submitted.lbr"
+UsedLibrary="C:/Users/Ramb0t/Documents/Git/Eagle_Library/Element14_Eagle_Library/National Semiconductors/NSC_By_element14_Batch_1.1.lbr"
 
 [Win_1]
 Type="Control Panel"
-Loc="1911 -9 3830 991"
+Loc="0 0 1919 1000"
 State=1
 Number=0
 
