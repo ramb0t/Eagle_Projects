@@ -147,17 +147,17 @@
 <hole x="3" y="27" drill="3.2"/>
 <hole x="32" y="27" drill="3.2"/>
 <hole x="32" y="12.5" drill="3.2"/>
-<text x="34.8" y="26.3" size="1.27" layer="16" ratio="15" rot="MR270">MagSwitch Rev1</text>
-<text x="30" y="28.6" size="1.27" layer="16" ratio="15" rot="MR270">DIYElectronics.co.za</text>
-<text x="28.1" y="21.6" size="1.27" layer="16" ratio="15" rot="MR270">RMawbey</text>
-<text x="26.4" y="17.9" size="1.27" layer="16" ratio="15" rot="MR270">2016</text>
-<text x="32.2" y="23.7" size="1.27" layer="16" ratio="15" rot="MR270">12-24V 2A</text>
-<text x="2.2" y="0.5" size="2.54" layer="16" ratio="20" rot="MR90">O-</text>
-<text x="9.8" y="4.7" size="2.1844" layer="16" ratio="20" rot="MR270">O+</text>
-<text x="15" y="4.6" size="2.1844" layer="16" ratio="20" rot="MR270">I+</text>
-<text x="20.3" y="4.1" size="2.54" layer="16" ratio="20" rot="MR270">I-</text>
-<text x="21.1" y="3.8" size="2.1844" layer="16" ratio="20" rot="MR180">GND</text>
-<text x="34.4" y="1.7" size="2.1844" layer="16" ratio="20" rot="MR0">SWT</text>
+<text x="34.8" y="25.5" size="1.4224" layer="16" font="vector" ratio="20" rot="MR270">MagSwitch Rev1</text>
+<text x="30.3" y="28.7" size="1.4224" layer="16" font="vector" ratio="20" rot="MR270">DIYElectronics</text>
+<text x="28.2" y="23.3" size="1.4224" layer="16" font="vector" ratio="20" rot="MR270">RMawbey</text>
+<text x="26.2" y="20" size="1.4224" layer="16" font="vector" ratio="20" rot="MR270">2016</text>
+<text x="32.2" y="25.8" size="1.4224" layer="16" font="vector" ratio="20" rot="MR270">12-24V 2A</text>
+<text x="4.9" y="5" size="2.54" layer="16" font="vector" ratio="20" rot="MR270">O-</text>
+<text x="10" y="5" size="2.54" layer="16" font="vector" ratio="20" rot="MR270">O+</text>
+<text x="15.1" y="4.9" size="2.54" layer="16" font="vector" ratio="20" rot="MR270">I+</text>
+<text x="20.2" y="4.8" size="2.54" layer="16" font="vector" ratio="20" rot="MR270">I-</text>
+<text x="21.8" y="3.9" size="2.1844" layer="16" font="vector" ratio="20" rot="MR180">GND</text>
+<text x="34.4" y="1.7" size="2.1844" layer="16" font="vector" ratio="20" rot="MR0">SWT</text>
 <circle x="3" y="27" radius="0.58309375" width="0.3048" layer="16"/>
 <circle x="32" y="27" radius="0.538515625" width="0.3048" layer="16"/>
 <circle x="32" y="12.5" radius="0.565684375" width="0.3048" layer="16"/>
