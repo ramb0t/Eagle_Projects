@@ -175,6 +175,8 @@ Electronics</text>
 <circle x="3" y="27" radius="0.58309375" width="0.3048" layer="16"/>
 <circle x="32" y="27" radius="0.538515625" width="0.3048" layer="16"/>
 <circle x="32" y="12.5" radius="0.565684375" width="0.3048" layer="16"/>
+<dimension x1="0" y1="0" x2="0" y2="30" x3="-4.3" y3="15" textsize="0.0508" layer="16"/>
+<dimension x1="0" y1="30" x2="35" y2="30" x3="17.5" y3="32.7" textsize="0.0508" layer="16"/>
 </plain>
 <libraries>
 <library name="resistor">
@@ -1741,6 +1743,7 @@ design rules under a new name.</description>
 <element name="U$4" library="RobThePyro" package="SHROOM" value="SHROOM5MM" x="14" y="21.5" rot="MR270"/>
 <element name="U$1" library="RobThePyro" package="TO252" value="DMN6068LK3" x="13.1" y="25.9" rot="MR270"/>
 <element name="U$2" library="RobThePyro" package="TO252" value="DMN6068LK3" x="22.7" y="17.8" rot="MR90"/>
+<element name="R3" library="resistor" package="M0805" value="100" x="-4.3" y="-6.2"/>
 </elements>
 <signals>
 <signal name="OUT-">
@@ -1774,8 +1777,6 @@ design rules under a new name.</description>
 <contactref element="U$2" pad="1"/>
 <contactref element="R2" pad="1"/>
 <contactref element="U$1" pad="1"/>
-<contactref element="X1" pad="2"/>
-<wire x1="31.34" y1="6.88" x2="31.34" y2="7.76" width="0.8128" layer="16"/>
 <wire x1="31.34" y1="7.76" x2="28.5" y2="10.6" width="0.8128" layer="16"/>
 <wire x1="28.5" y1="10.6" x2="28.5" y2="12.9" width="0.8128" layer="16"/>
 <wire x1="17.9" y1="28.18" x2="18.38" y2="28.18" width="0.8128" layer="16"/>
@@ -1798,6 +1799,8 @@ design rules under a new name.</description>
 <wire x1="24.7262" y1="26.3714" x2="22.617" y2="26.3714" width="0.8128" layer="16"/>
 <wire x1="22.617" y1="26.3714" x2="22.3756" y2="26.6128" width="0.8128" layer="16"/>
 <wire x1="22.3756" y1="26.6128" x2="20.5472" y2="26.6128" width="0.8128" layer="16"/>
+<contactref element="R3" pad="2"/>
+<wire x1="-3.35" y1="-6.2" x2="17.9" y2="15.52" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="N$5">
 <wire x1="0" y1="29.5" x2="0" y2="30" width="0.3048" layer="16"/>
@@ -1863,6 +1866,11 @@ design rules under a new name.</description>
 <contactref element="R1" pad="2"/>
 <wire x1="25.6354" y1="11.635" x2="26.26" y2="11.0104" width="0.8128" layer="16"/>
 <wire x1="26.26" y1="11.0104" x2="26.26" y2="6.88" width="0.8128" layer="16"/>
+</signal>
+<signal name="N$3">
+<contactref element="X1" pad="2"/>
+<contactref element="R3" pad="1"/>
+<wire x1="-5.25" y1="-6.2" x2="31.34" y2="6.88" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 </board>

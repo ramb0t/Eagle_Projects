@@ -12,8 +12,8 @@
 #include <Fonts/FreeMono9pt7b.h>
 
 #define LEDR A1 //AVR 24 PC1
-#define LEDG A2 //AVR 25 PC2 
-#define LEDB A3 //AVR 26 PC3 
+#define LEDG A2 //AVR 25 PC2
+#define LEDB A3 //AVR 26 PC3
 
 #define ENCA 2  //AVR 32 PD2
 #define ENCB 3  //AVR 1  PD3
@@ -57,11 +57,11 @@ volatile byte reading = 0; //somewhere to store the direct values we read from o
 A4988 stepper(MOTOR_STEPS, DIR, STEP);
 
 bool dirFlag;
-bool ledFlag; 
+bool ledFlag;
 
 byte oldPos = 0;
 bool menuSelect = false;
-bool speedSelect = false; 
+bool speedSelect = false;
 
 const unsigned char PROGMEM logo [] = {
 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
@@ -137,7 +137,7 @@ const int speed_ticks[] = {
 #define FORWARD   HIGH
 #define BACKWARD  LOW
 
-// buttons code 
+// buttons code
 #define btnRIGHT  0
 #define btnUP     1
 #define btnDOWN   2
@@ -184,11 +184,11 @@ void setup() {
   pinMode(SSTP, OUTPUT);
   pinMode(SEN, OUTPUT);
 
-  digitalWrite(SEN, LOW); // motor on 
-  digitalWrite(SDIR, LOW); 
+  digitalWrite(SEN, LOW); // motor on
+  digitalWrite(SDIR, LOW);
   digitalWrite(LEDR, HIGH);
-  digitalWrite(LEDB, LOW); 
-  dirFlag = false; 
+  digitalWrite(LEDB, LOW);
+  dirFlag = false;
 
 
   /*
@@ -197,17 +197,17 @@ void setup() {
    * Too high will result in a high pitched whine and the motor does not move.
    */
   stepper.setRPM(120);
-  stepper.setMicrostep(MICROSTEPS); 
+  stepper.setMicrostep(MICROSTEPS);
 
 
-  // OLED Display setup 
+  // OLED Display setup
   // by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3D (for the 128x64)
   // init done
 
   //Set the font
   //display.setFont(&FreeMono9pt7b);
-  
+
   // Show image buffer on the display hardware.
   // Since the buffer is intialized with an Adafruit splashscreen
   // internally, this will display the splashscreen.
@@ -229,7 +229,7 @@ void setup() {
   delay(2000);
   display.clearDisplay();
 
-    // text display tests
+  // text display tests
   display.setTextSize(2);
   display.setTextColor(WHITE);
   display.setCursor(0,12);
@@ -248,7 +248,7 @@ void setup() {
   ticks = -1;
   debounce = false;
 
-  digitalWrite(SDIR, actual_direction);  
+  digitalWrite(SDIR, actual_direction);
 }
 
 void PinA(){
@@ -275,7 +275,7 @@ void PinB(){
   sei(); //restart interrupts
 }
 
-int ticker = 0; 
+int ticker = 0;
 #define tickerMax 125
 
 // the loop function runs over and over again forever
@@ -289,21 +289,21 @@ void loop() {
 
   // if a button is pressed, start debounce time
   if(button != btnNONE) {
-    
+
     previous_time = millis();
-    debounce = true;  
+    debounce = true;
   }
 
   if(button != btnNONE){
     if(menuSelect) menuSelect = false;
-    else menuSelect = true; 
+    else menuSelect = true;
   }
 
   if(menuSelect){
     if(speedSelect){
       if(encoderPos - oldPos >0) increase_speed();
       else if(encoderPos - oldPos <0) decrease_speed();
-      oldPos = encoderPos; 
+      oldPos = encoderPos;
     }else{
       if(encoderPos%2 == 0)change_direction(FORWARD);
       else change_direction(BACKWARD);
@@ -312,18 +312,18 @@ void loop() {
     if(encoderPos%2 == 0) speedSelect = true;
     else speedSelect = false;
   }
-  
+
 
   // finally update the LCD
   updateLCD();
 
 
 
-  
+
   //digitalWrite(SSTP, HIGH);
-  //delay(1);             
+  //delay(1);
   //digitalWrite(SSTP, LOW);
-  //delay(1); 
+  //delay(1);
 
 //  display.clearDisplay();
 //  display.setTextSize(1);
@@ -339,7 +339,7 @@ void loop() {
 //  if(digitalRead(BTN1) == 0){
 //    display.fillCircle(32, 20, 4, WHITE);
 //  }
-//  
+//
 //  display.display();
 
   /*
@@ -349,14 +349,14 @@ void loop() {
 //  delay(500);
 //
 //      if(ledFlag){
-//        digitalWrite(LEDG, HIGH);   
-//        ledFlag = !ledFlag; 
+//        digitalWrite(LEDG, HIGH);
+//        ledFlag = !ledFlag;
 //    }else{
-//        digitalWrite(LEDG, LOW);   
+//        digitalWrite(LEDG, LOW);
 //        ledFlag = !ledFlag;
 //    }
 
-    
+
   /*
    * Moving motor to original position using steps
    */
@@ -364,47 +364,47 @@ void loop() {
 //  stepper.rotate(-encoderPos);
 //
 //  delay(500);
-//  
-////  ticker++; 
+//
+////  ticker++;
 ////  if(ticker > tickerMax){
-////    ticker = 0; 
+////    ticker = 0;
 //    if(ledFlag){
-//        digitalWrite(LEDG, HIGH);   
-//        ledFlag = !ledFlag; 
+//        digitalWrite(LEDG, HIGH);
+//        ledFlag = !ledFlag;
 //    }else{
-//        digitalWrite(LEDG, LOW);   
+//        digitalWrite(LEDG, LOW);
 //        ledFlag = !ledFlag;
 //    }
   //}
-  
+
 
 //    if(!digitalRead(BTN1)){
-//    dirFlag = !dirFlag; // flip 
+//    dirFlag = !dirFlag; // flip
 //    if(dirFlag){
 //      digitalWrite(SDIR, HIGH);
 //      digitalWrite(LEDR, LOW);
-//      digitalWrite(LEDB, HIGH); 
+//      digitalWrite(LEDB, HIGH);
 //    }else{
 //      digitalWrite(SDIR, LOW);
 //      digitalWrite(LEDR, HIGH);
-//      digitalWrite(LEDB, LOW); 
+//      digitalWrite(LEDB, LOW);
 //    }
 //  }
 
 
 
-  
+
 }
 
 // read buttons connected to a single analog pin
 int read_buttons() {
  if(digitalRead(ENCS) == 1) return btnNONE;
- else return btnSELECT;   
+ else return btnSELECT;
 }
 
 // increase speed if it's below the max (70)
 void increase_speed() {
-  
+
   if(actual_speed < 70) {
     actual_speed += 5;
     tick_count = 0;
@@ -414,7 +414,7 @@ void increase_speed() {
 
 // decrease speed if it's above the min (0)
 void decrease_speed() {
-  
+
   if(actual_speed > 0) {
     actual_speed -= 5;
     tick_count = 0;
@@ -424,7 +424,7 @@ void decrease_speed() {
 
 // change direction if needed
 void change_direction(int new_direction) {
-  
+
   if(actual_direction != new_direction) {
     actual_direction = new_direction;
     digitalWrite(SDIR, actual_direction);
@@ -441,8 +441,9 @@ void emergency_stop() {
 // update LCD
 void updateLCD() {
   display.clearDisplay();
+  display.setTextSize(1);
   // print first line:
-  // Speed: xxxRPM 
+  // Speed: xxxRPM
   display.setCursor(0,1);
   display.print("Speed: ");
   if(menuSelect == false && speedSelect == true){
@@ -456,64 +457,64 @@ void updateLCD() {
   }else{
     display.println(actual_speed);
   }
-  
 
 
-  display.setCursor(0,31);
+
+  display.setCursor(0,21);
   display.print("Direction: ");
- 
+
   if(menuSelect == false && speedSelect == false){
     display.drawRect(5,46,45,16,WHITE);
     if(actual_direction == FORWARD) display.print("-->");
-    else display.print("<--"); 
+    else display.print("<--");
   }
   else if(menuSelect == true && speedSelect == false){
     display.fillRect(5,46,45,16,WHITE);
     display.setTextColor(BLACK);
     if(actual_direction == FORWARD) display.print("-->");
-    else display.print("<--"); 
+    else display.print("<--");
     display.setTextColor(WHITE);
   }else{
     if(actual_direction == FORWARD) display.print("-->");
-    else display.print("<--"); 
+    else display.print("<--");
   }
 
-  
+
   // print second line:
   // progress bar [#####         ]
   // 15 speed steps: 0 - 5 - 10 - ... - 70
 //  lcd.setCursor(0,1);
 //  lcd.print("[");
-//  
+//
 //  for(int i = 1; i <= 14; i++) {
-//    
+//
 //    if(actual_speed > (5 * i) - 1) lcd.write(byte(0));
 //    else lcd.print(" ");
 //  }
-//  
-//  lcd.print("]"); 
+//
+//  lcd.print("]");
 
   if(digitalRead(ENCS) == 0){
-    display.fillCircle(119,2,2,WHITE); 
+    display.fillCircle(119,2,2,WHITE);
   }
-  display.print(encoderPos); 
+  display.print(encoderPos);
   display.display(); 
 }
 
 
 
 void timerIsr() {
- 
+
   if(actual_speed == 0) return;
- 
+
   tick_count++;
- 
-  if(tick_count == ticks) {  
- 
+
+  if(tick_count == ticks) {
+
     // make a step
     digitalWrite(SSTP, HIGH);
     digitalWrite(SSTP, LOW);
- 
+
     tick_count = 0;
   }
 }

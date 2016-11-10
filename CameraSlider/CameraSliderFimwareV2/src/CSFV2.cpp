@@ -61,7 +61,12 @@ bool ledFlag;
 
 byte oldPos = 0;
 bool menuSelect = false;
-bool speedSelect = false;
+bool running = false;
+int menu = 0;
+#define SPEEDMENU 0
+#define DIRMENU   1
+#define STARTMENU 2
+#define MENUEND   2
 
 const unsigned char PROGMEM logo [] = {
 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
@@ -146,7 +151,7 @@ const int speed_ticks[] = {
 #define btnNONE   5
 
 // debounce time (milliseconds)
-#define DEBOUNCE_TIME  200
+#define DEBOUNCE_TIME 200
 
 int actual_speed;
 int actual_direction;
@@ -156,7 +161,7 @@ int tick_count;
 
 int button;
 boolean debounce;
-int previous_time;
+unsigned long previous_time;
 
 void PinA();
 void PinB();
@@ -230,14 +235,14 @@ void setup() {
   // Clear the buffer.
   display.clearDisplay();
 
-  // draw a single pixel
-  display.drawPixel(10, 10, WHITE);
-  // Show the display buffer on the hardware.
-  // NOTE: You _must_ call display after making any drawing commands
-  // to make them visible on the display hardware!
-  display.display();
-  delay(2000);
-  display.clearDisplay();
+  // // draw a single pixel
+  // display.drawPixel(10, 10, WHITE);
+  // // Show the display buffer on the hardware.
+  // // NOTE: You _must_ call display after making any drawing commands
+  // // to make them visible on the display hardware!
+  // display.display();
+  // delay(2000);
+  // display.clearDisplay();
 
     // text display tests
   display.setTextSize(2);
@@ -257,6 +262,7 @@ void setup() {
   tick_count = 0;
   ticks = -1;
   debounce = false;
+  running = false;
 
   digitalWrite(SDIR, actual_direction);
 }
@@ -288,8 +294,16 @@ void PinB(){
 int ticker = 0;
 #define tickerMax 125
 
+int encoder_result = 0;
+
 // the loop function runs over and over again forever
 void loop() {
+
+  // calculate the current encoder move
+  if(encoderPos - oldPos >0) encoder_result = 1;
+  else if(encoderPos - oldPos <0) encoder_result = -1;
+  else encoder_result = 0;
+  oldPos = encoderPos;  // reset the relative pos value
 
   // check if debounce active
   if(debounce) {
@@ -299,28 +313,37 @@ void loop() {
 
   // if a button is pressed, start debounce time
   if(button != btnNONE) {
-
     previous_time = millis();
     debounce = true;
   }
 
+  // switch menu selected active mode
   if(button != btnNONE){
     if(menuSelect) menuSelect = false;
-    else menuSelect = true;
+    else{
+      menuSelect = true;
+      encoder_result = 0; // reset the encoder result
+    }
   }
 
-  if(menuSelect){
-    if(speedSelect){
-      if(encoderPos - oldPos >0) increase_speed();
-      else if(encoderPos - oldPos <0) decrease_speed();
-      oldPos = encoderPos;
-    }else{
-      if(encoderPos%2 == 0)change_direction(FORWARD);
-      else change_direction(BACKWARD);
+  if(!menuSelect){// selecting menu
+    menu = menu + encoder_result;
+    // loop menu around
+    if(menu > MENUEND) menu = 0;
+    else if(menu < 0) menu = MENUEND;
+  }
+  else{ // in menu selected mode
+    if(menu == SPEEDMENU){ // in speed mode
+      if(encoder_result == 1) increase_speed();
+      else if(encoder_result == -1) decrease_speed();
+    }else if(menu == DIRMENU){ // in direction mode
+      if(encoder_result == 1) change_direction(FORWARD);
+      else if(encoder_result == -1) change_direction(BACKWARD);
+    }else if(menu == STARTMENU){ // start your engines!
+      if(!running) running = true;
+      else running = false;
+      menuSelect = false; // get out the menu
     }
-  }else{
-    if(encoderPos%2 == 0) speedSelect = true;
-    else speedSelect = false;
   }
 
 
@@ -451,43 +474,58 @@ void emergency_stop() {
 // update LCD
 void updateLCD() {
   display.clearDisplay();
+  display.setTextSize(2);
+
   // print first line:
   // Speed: xxxRPM
   display.setCursor(0,1);
   display.print("Speed: ");
-  if(menuSelect == false && speedSelect == true){
-    display.drawRect(74,0,35,16,WHITE);
-    display.println(actual_speed);
-  }else if(menuSelect == true && speedSelect == true){
+  if(menuSelect == true && menu == SPEEDMENU){ // draw filled rect if selected
     display.fillRect(74,0,35,16,WHITE);
     display.setTextColor(BLACK);
     display.println(actual_speed);
     display.setTextColor(WHITE);
-  }else{
+  }else if(menu == SPEEDMENU){ // draw rect if in correct menu
+    display.drawRect(74,0,35,16,WHITE);
+    display.println(actual_speed);
+  }else{ // just draw speed
     display.println(actual_speed);
   }
 
-
-
-  display.setCursor(0,31);
+  // print second line:
+  // Direction: <-->
+  display.setCursor(0,21);
   display.print("Direction: ");
 
-  if(menuSelect == false && speedSelect == false){
-    display.drawRect(5,46,45,16,WHITE);
-    if(actual_direction == FORWARD) display.print("-->");
-    else display.print("<--");
-  }
-  else if(menuSelect == true && speedSelect == false){
-    display.fillRect(5,46,45,16,WHITE);
+  if(menuSelect == true && menu == DIRMENU){ // draw filled rect if selected
+    display.fillRect(5,36,45,16,WHITE);
     display.setTextColor(BLACK);
     if(actual_direction == FORWARD) display.print("-->");
     else display.print("<--");
     display.setTextColor(WHITE);
-  }else{
+  }else if(menu == DIRMENU){ // draw rect if in correct menu
+    display.drawRect(5,36,45,16,WHITE);
+    if(actual_direction == FORWARD) display.print("-->");
+    else display.print("<--");
+  }else{ // just draw direction
     if(actual_direction == FORWARD) display.print("-->");
     else display.print("<--");
   }
 
+  // print third line:
+  // Start
+  display.setCursor(60,40);
+  if(running){ // draw filled rect if running
+    display.fillRect(59,39,61,17,WHITE);
+    display.setTextColor(BLACK);
+    display.print("Start");
+    display.setTextColor(WHITE);
+  }else{
+    display.print("Start");
+  }
+  if(menu == STARTMENU){ // draw rect if in correct menu
+    display.drawRect(58,38,62,18,WHITE);
+  }
 
   // print second line:
   // progress bar [#####         ]
@@ -503,25 +541,34 @@ void updateLCD() {
 //
 //  lcd.print("]");
 
+  //small little debug icon
   if(digitalRead(ENCS) == 0){
     display.fillCircle(119,2,2,WHITE);
   }
+  if(running){
+    display.fillCircle(122,2,2,WHITE);
+  }
+  // debug encoder pos
+  display.setTextSize(1);
+  display.setCursor(0,55);
   display.print(encoderPos);
+
   display.display();
 }
 
 
-
+// ISR to do stepper moves
 void timerIsr() {
 
   if(actual_speed == 0) return;
 
   tick_count++;
 
-  if(tick_count == ticks) {
+  if(tick_count == ticks && running) {
 
     // make a step
     digitalWrite(SSTP, HIGH);
+    delayMicroseconds(20);
     digitalWrite(SSTP, LOW);
 
     tick_count = 0;
