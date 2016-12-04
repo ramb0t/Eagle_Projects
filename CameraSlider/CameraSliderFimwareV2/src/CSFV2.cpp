@@ -42,19 +42,30 @@ volatile byte encoderPos = 0; //this variable stores our current value of encode
 volatile byte oldEncPos = 0; //stores the last encoder position value so we can compare to the current reading and see if it has changed (so we know when to print to the serial monitor)
 volatile byte reading = 0; //somewhere to store the direct values we read from our interrupt pins before checking to see if we have moved a whole detent
 
-// Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
-#define MOTOR_STEPS 200
 
 // All the wires needed for full functionality
 #define DIR SDIR
 #define STEP SSTP
 
+// Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
+#define MOTOR_STEPS 200
+
 // Since microstepping is set externally, make sure this matches the selected mode
 // 1=full step, 2=half step etc.
 #define MICROSTEPS 16
 
-// 2-wire basic config, microstepping is hardwired on the driver
-//A4988 stepper(MOTOR_STEPS, DIR, STEP);
+// steps / rev
+#define STEPS_REV MOTOR_STEPS * MICROSTEPS
+
+//
+
+const int speed_ticks[] = {
+-1, 375, 188, 125, 94, 75, 63, 54, 47, 42, 38, 34, 31, 29, 27, 6};
+
+#define MAX_SPEED  75
+
+//interrupt period in uS
+#define INT_PERIOD  10
 
 bool dirFlag;
 bool ledFlag;
@@ -135,8 +146,7 @@ const unsigned char PROGMEM logo [] = {
 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0
 };
 
-const int speed_ticks[] = {
--1, 600, 300, 200, 150, 120, 100, 86, 75, 67, 60, 55, 50, 46, 43};
+
 
 // directions
 #define FORWARD   HIGH
@@ -206,15 +216,6 @@ void setup() {
   dirFlag = false;
 
 
-  /*
-   * Set target motor RPM.
-   * These motors can do up to about 200rpm.
-   * Too high will result in a high pitched whine and the motor does not move.
-   */
-  //stepper.setRPM(120);
-  //stepper.setMicrostep(MICROSTEPS);
-
-
   // OLED Display setup
   // by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3D (for the 128x64)
@@ -252,9 +253,9 @@ void setup() {
   display.display();
 
 
-  // Tiimer stuffs http://www.lucadentella.it/en/2013/05/30/allegro-a4988-e-arduino-3/
-  Timer1.initialize(100);
-  Timer1.attachInterrupt(timerIsr);
+  // Timer stuffs http://www.lucadentella.it/en/2013/05/30/allegro-a4988-e-arduino-3/
+  Timer1.initialize(10); // setup for 10uS interrupts
+  Timer1.attachInterrupt(timerIsr); // attach isr function
 
    // initial values
   actual_speed = 0;
@@ -350,9 +351,6 @@ void loop() {
   // finally update the LCD
   updateLCD();
 
-
-
-
   //digitalWrite(SSTP, HIGH);
   //delay(1);
   //digitalWrite(SSTP, LOW);
@@ -438,7 +436,7 @@ int read_buttons() {
 // increase speed if it's below the max (70)
 void increase_speed() {
 
-  if(actual_speed < 70) {
+  if(actual_speed < MAX_SPEED) {
     actual_speed += 5;
     tick_count = 0;
     ticks = speed_ticks[actual_speed / 5];
@@ -552,7 +550,12 @@ void updateLCD() {
   display.setTextSize(1);
   display.setCursor(0,55);
   display.print(encoderPos);
+  display.print(" ");
+  display.print(ticks);
+  display.print(" ");
+  display.print(tick_count);
 
+  // write out to the display
   display.display();
 }
 
@@ -560,17 +563,20 @@ void updateLCD() {
 // ISR to do stepper moves
 void timerIsr() {
 
+  //Don't even bother
   if(actual_speed == 0) return;
 
+  // inc the step counter
   tick_count++;
 
+  // if we have hit the limit and we should be running
   if(tick_count == ticks && running) {
 
     // make a step
     digitalWrite(SSTP, HIGH);
-    delayMicroseconds(20);
     digitalWrite(SSTP, LOW);
 
+    // reset tick counter
     tick_count = 0;
   }
 }
