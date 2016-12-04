@@ -21,7 +21,7 @@
 
 #define BTN1 5  //AVR 9  PD5
 
-#define EMAX 6  //AVR 10 PD6
+#define EMAX 6  //AVR 10   PD6
 #define EMIN 7  //AVR 11 PD7
 
 #define SDIR 8  //AVR 12 PB0
@@ -167,7 +167,7 @@ int actual_speed;
 int actual_direction;
 
 int ticks;
-int tick_count;
+unsigned int tick_count;
 
 int button;
 boolean debounce;
@@ -182,6 +182,7 @@ void change_direction(int new_direction);
 void emergency_stop();
 void updateLCD();
 void timerIsr() ;
+void pciSetup(byte pin);
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -203,6 +204,10 @@ void setup() {
   // Initialize Endstops
   pinMode(EMAX, INPUT_PULLUP);
   pinMode(EMIN, INPUT_PULLUP);
+
+  // Init Endstop interrupts http://playground.arduino.cc/Main/PinChangeInterrupt
+  pciSetup(EMAX);
+  pciSetup(EMIN);
 
   // Initialize Stepper
   pinMode(SDIR, OUTPUT);
@@ -266,6 +271,15 @@ void setup() {
   running = false;
 
   digitalWrite(SDIR, actual_direction);
+}
+
+// Install Pin change interrupt for a pin, can be called multiple times
+
+void pciSetup(byte pin)
+{
+    *digitalPinToPCMSK(pin) |= bit (digitalPinToPCMSKbit(pin));  // enable pin
+    PCIFR  |= bit (digitalPinToPCICRbit(pin)); // clear any outstanding interrupt
+    PCICR  |= bit (digitalPinToPCICRbit(pin)); // enable interrupt for the group
 }
 
 void PinA(){
@@ -554,6 +568,20 @@ void updateLCD() {
   display.print(ticks);
   display.print(" ");
   display.print(tick_count);
+  display.print(" ");
+  display.print(actual_direction);
+  display.print(" ");
+  if (digitalRead(EMAX)) {
+    display.print("1");
+  }else{
+    display.print("0");
+  }
+  display.print(" ");
+  if (digitalRead(EMIN)) {
+    display.print("1");
+  }else{
+    display.print("0");
+  }
 
   // write out to the display
   display.display();
@@ -570,7 +598,7 @@ void timerIsr() {
   tick_count++;
 
   // if we have hit the limit and we should be running
-  if(tick_count == ticks && running) {
+  if((tick_count >= ticks) && running) {
 
     // make a step
     digitalWrite(SSTP, HIGH);
@@ -580,3 +608,13 @@ void timerIsr() {
     tick_count = 0;
   }
 }
+
+ISR (PCINT2_vect) // handle pin change interrupt for D0 to D7 here
+ {
+     if(digitalRead(EMAX)){ // MAX hit
+       emergency_stop();
+     }
+     if(digitalRead(EMIN)){ // Min hit
+       emergency_stop();
+     }
+ }
