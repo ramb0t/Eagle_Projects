@@ -173,11 +173,18 @@ int button;
 boolean debounce;
 unsigned long previous_time;
 
+volatile boolean MAX_FLAG;
+volatile boolean MIN_FLAG;
+volatile long step_count;
+long calibration_steps;
+
 void PinA();
 void PinB();
 int read_buttons();
+void calibrate();
 void increase_speed();
 void decrease_speed();
+void set_speed(int speed);
 void change_direction(int new_direction);
 void emergency_stop();
 void updateLCD();
@@ -250,16 +257,16 @@ void setup() {
   // delay(2000);
   // display.clearDisplay();
 
-    // text display tests
-  display.setTextSize(2);
-  display.setTextColor(WHITE);
-  display.setCursor(0,12);
-  display.println("Hello, world!");
-  display.display();
+  // text display tests
+display.setTextSize(2);
+display.setTextColor(WHITE);
+display.setCursor(0,12);
+display.println("Hello, world!");
+display.display();
 
 
   // Timer stuffs http://www.lucadentella.it/en/2013/05/30/allegro-a4988-e-arduino-3/
-  Timer1.initialize(10); // setup for 10uS interrupts
+  Timer1.initialize(INT_PERIOD); // setup for 10uS interrupts
   Timer1.attachInterrupt(timerIsr); // attach isr function
 
    // initial values
@@ -269,8 +276,12 @@ void setup() {
   ticks = -1;
   debounce = false;
   running = false;
+  MAX_FLAG = false;
+  MIN_FLAG = false;
 
   digitalWrite(SDIR, actual_direction);
+
+  calibrate();
 }
 
 // Install Pin change interrupt for a pin, can be called multiple times
@@ -364,81 +375,73 @@ void loop() {
 
   // finally update the LCD
   updateLCD();
+}
 
-  //digitalWrite(SSTP, HIGH);
-  //delay(1);
-  //digitalWrite(SSTP, LOW);
-  //delay(1);
+//calibrate the extents
+void calibrate(){
+  // Tell the user what we are doing
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setCursor(0,1);
+  display.print("Calibrating... ");
+  display.setTextSize(2);
+  display.display();
 
-//  display.clearDisplay();
-//  display.setTextSize(1);
-//  display.setCursor(0,12);
-//  display.println("Encoder Pos: ");
-//  display.setTextSize(2);
-//  display.setCursor(0,63);
-//  display.println(encoderPos);
-//
-//  if(digitalRead(ENCS) == 0){
-//    display.fillCircle(16, 20, 4, WHITE);
-//  }
-//  if(digitalRead(BTN1) == 0){
-//    display.fillCircle(32, 20, 4, WHITE);
-//  }
-//
-//  display.display();
+  // move to max Endstop
+  change_direction(FORWARD);
+  set_speed(15);
+  running = true;
 
-  /*
-   * Moving motor one full revolution using the degree notation
-   */
-//  stepper.rotate(encoderPos);
-//  delay(500);
-//
-//      if(ledFlag){
-//        digitalWrite(LEDG, HIGH);
-//        ledFlag = !ledFlag;
-//    }else{
-//        digitalWrite(LEDG, LOW);
-//        ledFlag = !ledFlag;
-//    }
+  while(!MAX_FLAG && !MIN_FLAG){
+    // wait
+    // TODO: endstop error checking
+  }
+  MAX_FLAG = false;
+  MIN_FLAG = false;
+  display.setCursor(0,21);
+  display.print("Max Hit... ");
+  display.display();
+  // endstop retract:
+  change_direction(BACKWARD);
+  while(digitalRead(EMAX) || digitalRead(EMIN)){
+    // make a step
+    digitalWrite(SSTP, HIGH);
+    digitalWrite(SSTP, LOW);
+    delay(50);
+  }
+  delay(2000);
 
+  // reset step counter
+  step_count = 0;
 
-  /*
-   * Moving motor to original position using steps
-   */
-  //stepper.move(-200*MICROSTEPS);
-//  stepper.rotate(-encoderPos);
-//
-//  delay(500);
-//
-////  ticker++;
-////  if(ticker > tickerMax){
-////    ticker = 0;
-//    if(ledFlag){
-//        digitalWrite(LEDG, HIGH);
-//        ledFlag = !ledFlag;
-//    }else{
-//        digitalWrite(LEDG, LOW);
-//        ledFlag = !ledFlag;
-//    }
-  //}
+  // move to minimum Endstop
+  change_direction(BACKWARD);
+  set_speed(15);
+  running = true;
 
+  while(!MAX_FLAG && !MIN_FLAG){
+    // wait
+    // TODO: endstop error checking
+  }
+  MAX_FLAG = false;
+  MIN_FLAG = false;
+  change_direction(FORWARD);
+  display.setCursor(0,41);
+  display.print("Min Hit... ");
+  display.display();
 
-//    if(!digitalRead(BTN1)){
-//    dirFlag = !dirFlag; // flip
-//    if(dirFlag){
-//      digitalWrite(SDIR, HIGH);
-//      digitalWrite(LEDR, LOW);
-//      digitalWrite(LEDB, HIGH);
-//    }else{
-//      digitalWrite(SDIR, LOW);
-//      digitalWrite(LEDR, HIGH);
-//      digitalWrite(LEDB, LOW);
-//    }
-//  }
+  delay(2000);
 
+  // store steps counted
+  calibration_steps = step_count;
+  display.clearDisplay();
+  display.setCursor(0,1);
+  display.print("Steps: ");
+  display.setCursor(0,21);
+  display.print(calibration_steps);
+  display.display();
 
-
-
+  delay(10000);
 }
 
 // read buttons connected to a single analog pin
@@ -462,6 +465,16 @@ void decrease_speed() {
 
   if(actual_speed > 0) {
     actual_speed -= 5;
+    tick_count = 0;
+    ticks = speed_ticks[actual_speed / 5];
+  }
+}
+
+// Sets speed to a particular value
+void set_speed(int speed) {
+
+  if(speed > 0 && speed < MAX_SPEED) {
+    actual_speed = speed;
     tick_count = 0;
     ticks = speed_ticks[actual_speed / 5];
   }
@@ -604,6 +617,9 @@ void timerIsr() {
     digitalWrite(SSTP, HIGH);
     digitalWrite(SSTP, LOW);
 
+    // inc the step_counter
+    step_count++;
+
     // reset tick counter
     tick_count = 0;
   }
@@ -612,9 +628,11 @@ void timerIsr() {
 ISR (PCINT2_vect) // handle pin change interrupt for D0 to D7 here
  {
      if(digitalRead(EMAX)){ // MAX hit
+       MAX_FLAG = true;
        emergency_stop();
      }
      if(digitalRead(EMIN)){ // Min hit
+       MIN_FLAG = true;
        emergency_stop();
      }
  }
