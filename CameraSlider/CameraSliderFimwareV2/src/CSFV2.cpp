@@ -14,6 +14,7 @@
 #include "pinDefines.h"
 #include "Timer1.h"
 #include "Global.h"
+#include "Encoder.h"
 
 // Defines
 /*****************************************************************************/
@@ -65,21 +66,14 @@
 // debounce time (milliseconds)
 #define DEBOUNCE_TIME 200
 
+#define tickerMax 125
+
 // Class defines
 /******************************************************************************/
 Adafruit_SSD1306 display(OLED_RESET);
 
 // Variable declarations
 /******************************************************************************/
-
-// http://www.instructables.com/id/Improved-Arduino-Rotary-Encoder-Reading/?ALLSTEPS
-static int pinA = ENCA; // Our first hardware interrupt pin is digital pin 2
-static int pinB = ENCB; // Our second hardware interrupt pin is digital pin 3
-volatile byte aFlag = 0; // let's us know when we're expecting a rising edge on pinA to signal that the encoder has arrived at a detent
-volatile byte bFlag = 0; // let's us know when we're expecting a rising edge on pinB to signal that the encoder has arrived at a detent (opposite direction to when aFlag is set)
-volatile byte encoderPos = 0; //this variable stores our current value of encoder position. Change to int or uin16_t instead of byte if you want to record a larger range than 0-255
-volatile byte oldEncPos = 0; //stores the last encoder position value so we can compare to the current reading and see if it has changed (so we know when to print to the serial monitor)
-volatile byte reading = 0; //somewhere to store the direct values we read from our interrupt pins before checking to see if we have moved a whole detent
 
 // motor speed -> ticks mapping
 const int speed_ticks[] = {
@@ -113,10 +107,10 @@ volatile bool MIN_FLAG;
 volatile long step_count;
 long calibration_steps;
 
+int ticker = 0;
+
 // Function prototypes
 /******************************************************************************/
-void PinA();
-void PinB();
 int read_buttons();
 void calibrate();
 void increase_speed();
@@ -137,11 +131,8 @@ void setup() {
   pinMode(LEDG, OUTPUT);
   pinMode(LEDB, OUTPUT);
 
-  // Initialize Encoder
-  pinMode(pinA, INPUT_PULLUP); // set pinA as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
-  pinMode(pinB, INPUT_PULLUP); // set pinB as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
-  attachInterrupt(0,PinA,RISING); // set an interrupt on PinA, looking for a rising edge signal and executing the "PinA" Interrupt Service Routine (below)
-  attachInterrupt(1,PinB,RISING); // set an interrupt on PinB, looking for a rising edge signal and executing the "PinB" Interrupt Service Routine (below)
+  // Encoder setup
+  Encoder_Init();
 
   // Initialize Button
   pinMode(BTN1, INPUT_PULLUP);
@@ -234,35 +225,6 @@ void pciSetup(byte pin)
     PCIFR  |= bit (digitalPinToPCICRbit(pin)); // clear any outstanding interrupt
     PCICR  |= bit (digitalPinToPCICRbit(pin)); // enable interrupt for the group
 }
-
-void PinA(){
-  cli(); //stop interrupts happening before we read pin values
-  reading = PIND & 0xC; // read all eight pin values then strip away all but pinA and pinB's values
-  if(reading == B00001100 && aFlag) { //check that we have both pins at detent (HIGH) and that we are expecting detent on this pin's rising edge
-    encoderPos --; //decrement the encoder's position count
-    bFlag = 0; //reset flags for the next turn
-    aFlag = 0; //reset flags for the next turn
-  }
-  else if (reading == B00000100) bFlag = 1; //signal that we're expecting pinB to signal the transition to detent from free rotation
-  sei(); //restart interrupts
-}
-
-void PinB(){
-  cli(); //stop interrupts happening before we read pin values
-  reading = PIND & 0xC; //read all eight pin values then strip away all but pinA and pinB's values
-  if (reading == B00001100 && bFlag) { //check that we have both pins at detent (HIGH) and that we are expecting detent on this pin's rising edge
-    encoderPos ++; //increment the encoder's position count
-    bFlag = 0; //reset flags for the next turn
-    aFlag = 0; //reset flags for the next turn
-  }
-  else if (reading == B00001000) aFlag = 1; //signal that we're expecting pinA to signal the transition to detent from free rotation
-  sei(); //restart interrupts
-}
-
-int ticker = 0;
-#define tickerMax 125
-
-int encoder_result = 0;
 
 // the loop function runs over and over again forever
 void loop() {
