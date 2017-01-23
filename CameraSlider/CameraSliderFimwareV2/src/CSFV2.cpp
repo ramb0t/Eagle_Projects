@@ -79,6 +79,16 @@ int menu = 0;
 #define STARTMENU 2
 #define MENUEND   2
 
+int status;
+#define C_UDEFF   0
+#define C_INIT    1
+#define C_HMIN    2
+#define C_GMAX    3
+#define C_HMAX    4
+#define C_GMIN    5
+#define C_FIN     6
+#define C_DONE    7
+
 const unsigned char PROGMEM logo [] = {
 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
@@ -168,6 +178,8 @@ int actual_direction;
 
 int ticks;
 unsigned int tick_count;
+unsigned long debug_ticker;
+unsigned long DEBUG_TICKS;
 
 int button;
 boolean debounce;
@@ -281,6 +293,10 @@ display.display();
 
   digitalWrite(SDIR, actual_direction);
 
+  DEBUG_TICKS = 100000;
+  Serial.begin(9600);
+  Serial.println("Debug Started:");
+  status = C_UDEFF;
   calibrate();
 }
 
@@ -387,28 +403,57 @@ void calibrate(){
   display.setTextSize(2);
   display.display();
 
-  // move to max Endstop
-  change_direction(FORWARD);
+  // move to min endstop first
+  change_direction(BACKWARD);
   set_speed(15);
   running = true;
+  status = C_INIT;
 
-  while(!MAX_FLAG && !MIN_FLAG){
+  while(!MIN_FLAG){
     // wait
     // TODO: endstop error checking
+    set_speed(15);
   }
-  MAX_FLAG = false;
-  MIN_FLAG = false;
-  display.setCursor(0,21);
-  display.print("Max Hit... ");
-  display.display();
-  // endstop retract:
-  change_direction(BACKWARD);
-  while(digitalRead(EMAX) || digitalRead(EMIN)){
+  status = C_HMIN;
+  change_direction(FORWARD);
+  while(digitalRead(EMIN)){
     // make a step
     digitalWrite(SSTP, HIGH);
     digitalWrite(SSTP, LOW);
     delay(50);
   }
+  delay(1000);
+
+  MAX_FLAG = false;
+  MIN_FLAG = false;
+
+  // move to max Endstop
+  change_direction(FORWARD);
+  set_speed(15);
+  running = true;
+  status = C_GMAX;
+
+  while(!MAX_FLAG){
+    // wait
+    // TODO: endstop error checking
+    set_speed(15);
+  }
+  status = C_HMAX;
+  display.setCursor(0,21);
+  display.print("Max Hit... ");
+  display.display();
+  // endstop retract:
+  change_direction(BACKWARD);
+  while(digitalRead(EMAX)){
+    // make a step
+    digitalWrite(SSTP, HIGH);
+    digitalWrite(SSTP, LOW);
+    delay(50);
+  }
+  delay(1000);
+  MAX_FLAG = false;
+  MIN_FLAG = false;
+  status = C_GMIN;
   delay(2000);
 
   // reset step counter
@@ -419,13 +464,15 @@ void calibrate(){
   set_speed(15);
   running = true;
 
-  while(!MAX_FLAG && !MIN_FLAG){
+  while(!MIN_FLAG){
     // wait
     // TODO: endstop error checking
   }
   MAX_FLAG = false;
   MIN_FLAG = false;
   change_direction(FORWARD);
+  running = false;
+  status = C_FIN;
   display.setCursor(0,41);
   display.print("Min Hit... ");
   display.display();
@@ -440,6 +487,7 @@ void calibrate(){
   display.setCursor(0,21);
   display.print(calibration_steps);
   display.display();
+  status = C_DONE;
 
   delay(10000);
 }
@@ -603,6 +651,24 @@ void updateLCD() {
 
 // ISR to do stepper moves
 void timerIsr() {
+
+  debug_ticker++;
+  if(debug_ticker >= DEBUG_TICKS){
+    Serial.print("DEBUG: ");
+    Serial.print("Run ");
+    Serial.print(running);
+    Serial.print(", Spd ");
+    Serial.print(actual_speed);
+    Serial.print(", Dir ");
+    Serial.print(actual_direction);
+    Serial.print(", MaxF ");
+    Serial.print(MAX_FLAG);
+    Serial.print(", MinF ");
+    Serial.print(MIN_FLAG);
+    Serial.print(", Stat ");
+    Serial.println(status);
+
+  }
 
   //Don't even bother
   if(actual_speed == 0) return;
