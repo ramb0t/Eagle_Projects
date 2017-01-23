@@ -298,10 +298,15 @@ void calibrate(){
   running = true;
   status = C_INIT;
 
-  while(!MIN_FLAG){
+  while(!MIN_FLAG && !MAX_FLAG){
     // wait
-    // TODO: endstop error checking
-    set_speed(15);
+  }
+  if(MAX_FLAG){
+    emergency_stop();
+    Serial.println("Error hit Max");
+    //TODO: error checking
+  }else{ // min endstop
+    running = false;
   }
   status = C_HMIN;
   change_direction(FORWARD);
@@ -312,7 +317,7 @@ void calibrate(){
     delay(50);
   }
   delay(1000);
-
+  // reset flags
   MAX_FLAG = false;
   MIN_FLAG = false;
 
@@ -322,10 +327,15 @@ void calibrate(){
   running = true;
   status = C_GMAX;
 
-  while(!MAX_FLAG){
+  while(!MIN_FLAG && !MAX_FLAG){
     // wait
-    // TODO: endstop error checking
-    set_speed(15);
+  }
+  if(MIN_FLAG){
+    emergency_stop();
+    Serial.println("Error hit Min");
+    //TODO: error checking
+  }else{ // min endstop
+    running = false;
   }
   status = C_HMAX;
   display.setCursor(0,21);
@@ -353,14 +363,19 @@ void calibrate(){
   set_speed(15);
   running = true;
 
-  while(!MIN_FLAG){
+  while(!MIN_FLAG && !MAX_FLAG){
     // wait
-    // TODO: endstop error checking
+  }
+  if(MAX_FLAG){
+    emergency_stop();
+    Serial.println("Error hit Max");
+    //TODO: error checking
+  }else{ // min endstop
+    running = false;
   }
   MAX_FLAG = false;
   MIN_FLAG = false;
   change_direction(FORWARD);
-  running = false;
   status = C_FIN;
   display.setCursor(0,41);
   display.print("Min Hit... ");
@@ -431,6 +446,7 @@ void emergency_stop() {
   actual_speed = 0;
   tick_count = 0;
   ticks = speed_ticks[actual_speed / 5];
+  running = false;
 }
 
 // update LCD
@@ -542,10 +558,12 @@ ISR (PCINT2_vect) // handle pin change interrupt for D0 to D7 here
  {
      if(digitalRead(EMAX)){ // MAX hit
        MAX_FLAG = true;
-       emergency_stop();
+       // check that we are out of the calibration loop
+       if(status == C_DONE) emergency_stop();
      }
      if(digitalRead(EMIN)){ // Min hit
        MIN_FLAG = true;
-       emergency_stop();
+       // check that we are out of the calibration loop
+       if(status == C_DONE) emergency_stop();
      }
  }
