@@ -212,7 +212,7 @@ void setup() {
 
   digitalWrite(SDIR, actual_direction);
 
-  DEBUG_TICKS = 100000;
+  DEBUG_TICKS = 10000;
   Serial.begin(9600);
   Serial.println("Debug Started:");
   status = C_UDEFF;

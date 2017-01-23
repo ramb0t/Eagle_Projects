@@ -12,6 +12,7 @@ void timerIsr() {
 
   debug_ticker++;
   if(debug_ticker >= DEBUG_TICKS){
+    debug_ticker = 0; 
     Serial.print("DEBUG: ");
     Serial.print("Run ");
     Serial.print(running);
