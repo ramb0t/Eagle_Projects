@@ -13,6 +13,7 @@
 #include "logo.h"
 #include "pinDefines.h"
 #include "Timer1.h"
+#include "Global.h"
 
 // Defines
 /*****************************************************************************/
@@ -96,14 +97,14 @@ int menu = 0;
 int status;
 
 // motor parameters
-int actual_speed;
+volatile int actual_speed;
 int actual_direction;
 
 // interrupt vars
-int ticks;
-unsigned int tick_count;
-unsigned long debug_ticker;
-unsigned long DEBUG_TICKS;
+volatile int ticks;
+volatile unsigned int tick_count;
+volatile unsigned long debug_ticker;
+volatile unsigned long DEBUG_TICKS;
 
 int button;
 boolean debounce;
