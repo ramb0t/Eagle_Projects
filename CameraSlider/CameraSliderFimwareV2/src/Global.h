@@ -4,7 +4,7 @@
 // Global Variables
 /******************************************************************************/
 
-//
+// Timer ISR vars
 extern volatile long step_count;
 extern volatile int actual_speed;
 extern volatile int ticks;

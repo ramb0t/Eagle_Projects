@@ -108,6 +108,7 @@ volatile long step_count;
 long calibration_steps;
 
 int ticker = 0;
+int encoder_result = 0;
 
 // Function prototypes
 /******************************************************************************/
