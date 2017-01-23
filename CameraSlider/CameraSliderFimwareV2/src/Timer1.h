@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include <TimerOne.h>
 #include "pinDefines.h"
+#include "Global.h"
 
 // Defines:
 /*****************************************************************************/
