@@ -90,28 +90,26 @@ bool ledFlag;
 
 byte oldPos = 0;
 bool menuSelect = false;
-bool running = false;
 
 // State machine vars
 int menu = 0;
-int status;
+volatile int status;
 
 // motor parameters
 volatile int actual_speed;
-int actual_direction;
+volatile int actual_direction;
 
 // interrupt vars
 volatile int ticks;
-volatile unsigned int tick_count;
-volatile unsigned long debug_ticker;
 volatile unsigned long DEBUG_TICKS;
+volatile bool running = false;
 
 int button;
-boolean debounce;
+bool debounce;
 unsigned long previous_time;
 
-volatile boolean MAX_FLAG;
-volatile boolean MIN_FLAG;
+volatile bool MAX_FLAG;
+volatile bool MIN_FLAG;
 volatile long step_count;
 long calibration_steps;
 

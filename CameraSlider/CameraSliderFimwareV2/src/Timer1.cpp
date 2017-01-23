@@ -1,5 +1,10 @@
 #include "Timer1.h"
 
+// Variable declarations
+/*****************************************************************************/
+unsigned long debug_ticker;
+volatile unsigned int tick_count;
+
 // Functions:
 /*****************************************************************************/
 // ISR to do stepper moves
