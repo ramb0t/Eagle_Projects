@@ -68,6 +68,9 @@
 
 #define tickerMax 125
 
+#define STEP_DELAY  10
+#define CALIB_SPEED 30
+
 // Class defines
 /******************************************************************************/
 Adafruit_SSD1306 display(OLED_RESET);
@@ -292,9 +295,28 @@ void calibrate(){
   display.setTextSize(2);
   display.display();
 
+  // Check that we are not on the endstops
+  change_direction(FORWARD);
+  while(digitalRead(EMIN)){
+    // make a step
+    digitalWrite(SSTP, HIGH);
+    digitalWrite(SSTP, LOW);
+    delay(STEP_DELAY);
+  }
+  change_direction(BACKWARD);
+  while(digitalRead(EMAX)){
+    // make a step
+    digitalWrite(SSTP, HIGH);
+    digitalWrite(SSTP, LOW);
+    delay(STEP_DELAY);
+  }
+
+  MIN_FLAG = false;
+  MAX_FLAG = false;
+
   // move to min endstop first
   change_direction(BACKWARD);
-  set_speed(15);
+  set_speed(CALIB_SPEED);
   running = true;
   status = C_INIT;
 
@@ -314,16 +336,16 @@ void calibrate(){
     // make a step
     digitalWrite(SSTP, HIGH);
     digitalWrite(SSTP, LOW);
-    delay(50);
+    delay(STEP_DELAY);
   }
-  delay(1000);
+
   // reset flags
   MAX_FLAG = false;
   MIN_FLAG = false;
 
   // move to max Endstop
   change_direction(FORWARD);
-  set_speed(15);
+  set_speed(CALIB_SPEED);
   running = true;
   status = C_GMAX;
 
@@ -347,20 +369,20 @@ void calibrate(){
     // make a step
     digitalWrite(SSTP, HIGH);
     digitalWrite(SSTP, LOW);
-    delay(50);
+    delay(STEP_DELAY);
   }
-  delay(1000);
+
   MAX_FLAG = false;
   MIN_FLAG = false;
   status = C_GMIN;
-  delay(2000);
+
 
   // reset step counter
   step_count = 0;
 
   // move to minimum Endstop
   change_direction(BACKWARD);
-  set_speed(15);
+  set_speed(CALIB_SPEED);
   running = true;
 
   while(!MIN_FLAG && !MAX_FLAG){
