@@ -1,6 +1,19 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+// Global Defines
+/******************************************************************************/
+// Menu states
+#define SPEEDMENU 0
+#define DIRMENU   1
+#define STARTMENU 2
+#define MENUEND   2
+
+// Directions
+#define FORWARD   HIGH
+#define BACKWARD  LOW
+
+
 // Global Variables
 /******************************************************************************/
 
@@ -19,6 +32,16 @@ extern volatile int actual_direction;
 //Encoder vars
 extern volatile byte encoderPos;
 extern volatile byte oldEncPos;
+
+//Debug flags
+extern bool DEBUG_SERIAL;
+extern bool DEBUG_OLED;
+
+//State Machine vars
+extern bool menuSelect;
+extern int menu;
+extern volatile int status;
+
 
 
 // Global Functions

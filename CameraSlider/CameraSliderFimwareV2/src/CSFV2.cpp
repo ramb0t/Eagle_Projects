@@ -5,16 +5,16 @@
 #include <Arduino.h>
 //#include "A4988.h"
 #include <TimerOne.h>
-#include <SPI.h>
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include <Fonts/FreeMono9pt7b.h>
-#include "logo.h"
+// #include <SPI.h>
+// #include <Wire.h>
+// #include <Adafruit_GFX.h>
+// #include <Adafruit_SSD1306.h>
+// #include <Fonts/FreeMono9pt7b.h>
 #include "pinDefines.h"
 #include "Timer1.h"
 #include "Global.h"
 #include "Encoder.h"
+#include "OLED.h"
 
 // Defines
 /*****************************************************************************/
@@ -24,22 +24,19 @@
 
 // Since microstepping is set externally, make sure this matches the selected mode
 // 1=full step, 2=half step etc.
-#define MICROSTEPS 16
+#define MICROSTEPS 1
 
 // steps / rev
 #define STEPS_REV MOTOR_STEPS * MICROSTEPS
+
+// mm movement per revolution, belt pitch * pulley teeth
+#define MM_REV 2*20
 
 // Motor max speed
 #define MAX_SPEED  75
 
 //interrupt period in uS
 #define INT_PERIOD  10
-
-// Menu states
-#define SPEEDMENU 0
-#define DIRMENU   1
-#define STARTMENU 2
-#define MENUEND   2
 
 // Calibration states
 #define C_UDEFF   0
@@ -51,9 +48,6 @@
 #define C_FIN     6
 #define C_DONE    7
 
-// directions
-#define FORWARD   HIGH
-#define BACKWARD  LOW
 
 // buttons code
 #define btnRIGHT  0
@@ -68,15 +62,14 @@
 
 #define tickerMax 125
 
-#define STEP_DELAY  10
-#define CALIB_SPEED 30
-
-// Class defines
-/******************************************************************************/
-Adafruit_SSD1306 display(OLED_RESET);
+#define STEP_DELAY  50
+#define CALIB_SPEED 10
 
 // Variable declarations
 /******************************************************************************/
+// debug enable
+bool DEBUG_SERIAL;
+bool DEBUG_OLED;
 
 // motor speed -> ticks mapping
 const int speed_ticks[] = {
@@ -86,9 +79,9 @@ bool dirFlag;
 bool ledFlag;
 
 byte oldPos = 0;
-bool menuSelect = false;
 
 // State machine vars
+bool menuSelect = false;
 int menu = 0;
 volatile int status;
 
@@ -130,6 +123,8 @@ void pciSetup(byte pin);
 
 // the setup function runs once when you press reset or power the board
 void setup() {
+  DEBUG_SERIAL = true;
+  DEBUG_OLED   = true;
   // initialize LEDS
   pinMode(LEDR, OUTPUT);
   pinMode(LEDG, OUTPUT);
@@ -163,41 +158,7 @@ void setup() {
 
 
   // OLED Display setup
-  // by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3D (for the 128x64)
-  // init done
-
-  //Set the font
-  //display.setFont(&FreeMono9pt7b);
-
-  // Show image buffer on the display hardware.
-  // Since the buffer is intialized with an Adafruit splashscreen
-  // internally, this will display the splashscreen.
-  // Clear the buffer.
-  display.clearDisplay();
-  display.drawBitmap(0,0,logo,128,64,WHITE);
-  display.display();
-  delay(2000);
-
-  // Clear the buffer.
-  display.clearDisplay();
-
-  // // draw a single pixel
-  // display.drawPixel(10, 10, WHITE);
-  // // Show the display buffer on the hardware.
-  // // NOTE: You _must_ call display after making any drawing commands
-  // // to make them visible on the display hardware!
-  // display.display();
-  // delay(2000);
-  // display.clearDisplay();
-
-  // text display tests
-  display.setTextSize(2);
-  display.setTextColor(WHITE);
-  display.setCursor(0,12);
-  display.println("Hello, world!");
-  display.display();
-
+  OLED_Init();
 
   // Timer stuffs http://www.lucadentella.it/en/2013/05/30/allegro-a4988-e-arduino-3/
   Timer1.initialize(INT_PERIOD); // setup for 10uS interrupts
@@ -215,11 +176,12 @@ void setup() {
 
   digitalWrite(SDIR, actual_direction);
 
-  DEBUG_TICKS = 10000;
-  Serial.begin(9600);
+  DEBUG_TICKS = 50000;
+  Serial.begin(115200);
   Serial.println("Debug Started:");
   status = C_UDEFF;
   calibrate();
+  DEBUG_SERIAL = false;
 }
 
 // Install Pin change interrupt for a pin, can be called multiple times
@@ -281,141 +243,141 @@ void loop() {
   }
 
 
-  // finally update the LCD
-  updateLCD();
+  // finally update the OLED
+  OLED_Update();
 }
 
 //calibrate the extents
 void calibrate(){
   // Tell the user what we are doing
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setCursor(0,1);
-  display.print("Calibrating... ");
-  display.setTextSize(2);
-  display.display();
-
-  // Check that we are not on the endstops
-  change_direction(FORWARD);
-  while(digitalRead(EMIN)){
-    // make a step
-    digitalWrite(SSTP, HIGH);
-    digitalWrite(SSTP, LOW);
-    delay(STEP_DELAY);
-  }
-  change_direction(BACKWARD);
-  while(digitalRead(EMAX)){
-    // make a step
-    digitalWrite(SSTP, HIGH);
-    digitalWrite(SSTP, LOW);
-    delay(STEP_DELAY);
-  }
-
-  MIN_FLAG = false;
-  MAX_FLAG = false;
-
-  // move to min endstop first
-  change_direction(BACKWARD);
-  set_speed(CALIB_SPEED);
-  running = true;
-  status = C_INIT;
-
-  while(!MIN_FLAG && !MAX_FLAG){
-    // wait
-  }
-  if(MAX_FLAG){
-    emergency_stop();
-    Serial.println("Error hit Max");
-    //TODO: error checking
-  }else{ // min endstop
-    running = false;
-  }
-  status = C_HMIN;
-  change_direction(FORWARD);
-  while(digitalRead(EMIN)){
-    // make a step
-    digitalWrite(SSTP, HIGH);
-    digitalWrite(SSTP, LOW);
-    delay(STEP_DELAY);
-  }
-
-  // reset flags
-  MAX_FLAG = false;
-  MIN_FLAG = false;
-
-  // move to max Endstop
-  change_direction(FORWARD);
-  set_speed(CALIB_SPEED);
-  running = true;
-  status = C_GMAX;
-
-  while(!MIN_FLAG && !MAX_FLAG){
-    // wait
-  }
-  if(MIN_FLAG){
-    emergency_stop();
-    Serial.println("Error hit Min");
-    //TODO: error checking
-  }else{ // min endstop
-    running = false;
-  }
-  status = C_HMAX;
-  display.setCursor(0,21);
-  display.print("Max Hit... ");
-  display.display();
-  // endstop retract:
-  change_direction(BACKWARD);
-  while(digitalRead(EMAX)){
-    // make a step
-    digitalWrite(SSTP, HIGH);
-    digitalWrite(SSTP, LOW);
-    delay(STEP_DELAY);
-  }
-
-  MAX_FLAG = false;
-  MIN_FLAG = false;
-  status = C_GMIN;
-
-
-  // reset step counter
-  step_count = 0;
-
-  // move to minimum Endstop
-  change_direction(BACKWARD);
-  set_speed(CALIB_SPEED);
-  running = true;
-
-  while(!MIN_FLAG && !MAX_FLAG){
-    // wait
-  }
-  if(MAX_FLAG){
-    emergency_stop();
-    Serial.println("Error hit Max");
-    //TODO: error checking
-  }else{ // min endstop
-    running = false;
-  }
-  MAX_FLAG = false;
-  MIN_FLAG = false;
-  change_direction(FORWARD);
-  status = C_FIN;
-  display.setCursor(0,41);
-  display.print("Min Hit... ");
-  display.display();
-
-  delay(2000);
-
-  // store steps counted
-  calibration_steps = step_count;
-  display.clearDisplay();
-  display.setCursor(0,1);
-  display.print("Steps: ");
-  display.setCursor(0,21);
-  display.print(calibration_steps);
-  display.display();
-  status = C_DONE;
-
-  delay(10000);
+  // display.clearDisplay();
+  // display.setTextSize(1);
+  // display.setCursor(0,1);
+  // display.print("Calibrating... ");
+  // display.setTextSize(2);
+  // display.display();
+  //
+  // // Check that we are not on the endstops
+  // change_direction(FORWARD);
+  // while(digitalRead(EMIN)){
+  //   // make a step
+  //   digitalWrite(SSTP, HIGH);
+  //   digitalWrite(SSTP, LOW);
+  //   delay(STEP_DELAY);
+  // }
+  // change_direction(BACKWARD);
+  // while(digitalRead(EMAX)){
+  //   // make a step
+  //   digitalWrite(SSTP, HIGH);
+  //   digitalWrite(SSTP, LOW);
+  //   delay(STEP_DELAY);
+  // }
+  //
+  // MIN_FLAG = false;
+  // MAX_FLAG = false;
+  //
+  // // move to min endstop first
+  // change_direction(BACKWARD);
+  // set_speed(CALIB_SPEED);
+  // running = true;
+  // status = C_INIT;
+  //
+  // while(!MIN_FLAG && !MAX_FLAG){
+  //   // wait
+  // }
+  // if(MAX_FLAG){
+  //   emergency_stop();
+  //   Serial.println("Error hit Max");
+  //   //TODO: error checking
+  // }else{ // min endstop
+  //   running = false;
+  // }
+  // status = C_HMIN;
+  // change_direction(FORWARD);
+  // while(digitalRead(EMIN)){
+  //   // make a step
+  //   digitalWrite(SSTP, HIGH);
+  //   digitalWrite(SSTP, LOW);
+  //   delay(STEP_DELAY);
+  // }
+  //
+  // // reset flags
+  // MAX_FLAG = false;
+  // MIN_FLAG = false;
+  //
+  // // move to max Endstop
+  // change_direction(FORWARD);
+  // set_speed(CALIB_SPEED);
+  // running = true;
+  // status = C_GMAX;
+  //
+  // while(!MIN_FLAG && !MAX_FLAG){
+  //   // wait
+  // }
+  // if(MIN_FLAG){
+  //   emergency_stop();
+  //   Serial.println("Error hit Min");
+  //   //TODO: error checking
+  // }else{ // min endstop
+  //   running = false;
+  // }
+  // status = C_HMAX;
+  // display.setCursor(0,21);
+  // display.print("Max Hit... ");
+  // display.display();
+  // // endstop retract:
+  // change_direction(BACKWARD);
+  // while(digitalRead(EMAX)){
+  //   // make a step
+  //   digitalWrite(SSTP, HIGH);
+  //   digitalWrite(SSTP, LOW);
+  //   delay(STEP_DELAY);
+  // }
+  //
+  // MAX_FLAG = false;
+  // MIN_FLAG = false;
+  // status = C_GMIN;
+  //
+  //
+  // // reset step counter
+  // step_count = 0;
+  //
+  // // move to minimum Endstop
+  // change_direction(BACKWARD);
+  // set_speed(CALIB_SPEED);
+  // running = true;
+  //
+  // while(!MIN_FLAG && !MAX_FLAG){
+  //   // wait
+  // }
+  // if(MAX_FLAG){
+  //   emergency_stop();
+  //   Serial.println("Error hit Max");
+  //   //TODO: error checking
+  // }else{ // min endstop
+  //   running = false;
+  // }
+  // MAX_FLAG = false;
+  // MIN_FLAG = false;
+  // change_direction(FORWARD);
+  // status = C_FIN;
+  // display.setCursor(0,41);
+  // display.print("Min Hit... ");
+  // display.display();
+  //
+  // delay(2000);
+  //
+  // // store steps counted
+  // calibration_steps = step_count;
+  // display.clearDisplay();
+  // display.setCursor(0,1);
+  // display.print("Steps: ");
+  // display.setCursor(0,21);
+  // display.print(calibration_steps);
+  // display.display();
+  // status = C_DONE;
+  //
+  // delay(10000);
 }
 
 // read buttons connected to a single analog pin
@@ -471,109 +433,7 @@ void emergency_stop() {
   running = false;
 }
 
-// update LCD
-void updateLCD() {
-  display.clearDisplay();
-  display.setTextSize(2);
 
-  // print first line:
-  // Speed: xxxRPM
-  display.setCursor(0,1);
-  display.print("Speed: ");
-  if(menuSelect == true && menu == SPEEDMENU){ // draw filled rect if selected
-    display.fillRect(74,0,35,16,WHITE);
-    display.setTextColor(BLACK);
-    display.println(actual_speed);
-    display.setTextColor(WHITE);
-  }else if(menu == SPEEDMENU){ // draw rect if in correct menu
-    display.drawRect(74,0,35,16,WHITE);
-    display.println(actual_speed);
-  }else{ // just draw speed
-    display.println(actual_speed);
-  }
-
-  // print second line:
-  // Direction: <-->
-  display.setCursor(0,21);
-  display.print("Direction: ");
-
-  if(menuSelect == true && menu == DIRMENU){ // draw filled rect if selected
-    display.fillRect(5,36,45,16,WHITE);
-    display.setTextColor(BLACK);
-    if(actual_direction == FORWARD) display.print("-->");
-    else display.print("<--");
-    display.setTextColor(WHITE);
-  }else if(menu == DIRMENU){ // draw rect if in correct menu
-    display.drawRect(5,36,45,16,WHITE);
-    if(actual_direction == FORWARD) display.print("-->");
-    else display.print("<--");
-  }else{ // just draw direction
-    if(actual_direction == FORWARD) display.print("-->");
-    else display.print("<--");
-  }
-
-  // print third line:
-  // Start
-  display.setCursor(60,40);
-  if(running){ // draw filled rect if running
-    display.fillRect(59,39,61,17,WHITE);
-    display.setTextColor(BLACK);
-    display.print("Start");
-    display.setTextColor(WHITE);
-  }else{
-    display.print("Start");
-  }
-  if(menu == STARTMENU){ // draw rect if in correct menu
-    display.drawRect(58,38,62,18,WHITE);
-  }
-
-  // print second line:
-  // progress bar [#####         ]
-  // 15 speed steps: 0 - 5 - 10 - ... - 70
-//  lcd.setCursor(0,1);
-//  lcd.print("[");
-//
-//  for(int i = 1; i <= 14; i++) {
-//
-//    if(actual_speed > (5 * i) - 1) lcd.write(byte(0));
-//    else lcd.print(" ");
-//  }
-//
-//  lcd.print("]");
-
-  //small little debug icon
-  if(digitalRead(ENCS) == 0){
-    display.fillCircle(119,2,2,WHITE);
-  }
-  if(running){
-    display.fillCircle(122,2,2,WHITE);
-  }
-  // debug encoder pos
-  display.setTextSize(1);
-  display.setCursor(0,55);
-  display.print(encoderPos);
-  display.print(" ");
-  display.print(ticks);
-  display.print(" ");
-  display.print(tick_count);
-  display.print(" ");
-  display.print(actual_direction);
-  display.print(" ");
-  if (digitalRead(EMAX)) {
-    display.print("1");
-  }else{
-    display.print("0");
-  }
-  display.print(" ");
-  if (digitalRead(EMIN)) {
-    display.print("1");
-  }else{
-    display.print("0");
-  }
-
-  // write out to the display
-  display.display();
-}
 
 
 ISR (PCINT2_vect) // handle pin change interrupt for D0 to D7 here

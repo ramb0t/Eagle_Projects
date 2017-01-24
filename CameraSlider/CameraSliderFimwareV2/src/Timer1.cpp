@@ -10,23 +10,25 @@ volatile unsigned int tick_count;
 // ISR to do stepper moves
 void timerIsr() {
 
-  debug_ticker++;
-  if(debug_ticker >= DEBUG_TICKS){
-    debug_ticker = 0; 
-    Serial.print("DEBUG: ");
-    Serial.print("Run ");
-    Serial.print(running);
-    Serial.print(", Spd ");
-    Serial.print(actual_speed);
-    Serial.print(", Dir ");
-    Serial.print(actual_direction);
-    Serial.print(", MaxF ");
-    Serial.print(MAX_FLAG);
-    Serial.print(", MinF ");
-    Serial.print(MIN_FLAG);
-    Serial.print(", Stat ");
-    Serial.println(status);
+  if(DEBUG_SERIAL){
+    debug_ticker++;
+    if(debug_ticker >= DEBUG_TICKS){
+      debug_ticker = 0;
+      Serial.print("DEBUG: ");
+      Serial.print("Run ");
+      Serial.print(running);
+      Serial.print(", Spd ");
+      Serial.print(actual_speed);
+      Serial.print(", Dir ");
+      Serial.print(actual_direction);
+      Serial.print(", MaxF ");
+      Serial.print(MAX_FLAG);
+      Serial.print(", MinF ");
+      Serial.print(MIN_FLAG);
+      Serial.print(", Stat ");
+      Serial.println(status);
 
+    }
   }
 
   //Don't even bother
