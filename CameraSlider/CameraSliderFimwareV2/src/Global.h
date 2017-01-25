@@ -1,6 +1,8 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+#include <Adafruit_SSD1306.h>
+
 // Global Defines
 /******************************************************************************/
 // Menu states
@@ -43,7 +45,7 @@ extern int menu;
 extern volatile int status;
 
 
-
+extern Adafruit_SSD1306 display;
 // Global Functions
 /******************************************************************************/
 //void print_global_x();

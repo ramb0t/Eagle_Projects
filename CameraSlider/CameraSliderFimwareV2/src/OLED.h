@@ -8,7 +8,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <Fonts/FreeMono9pt7b.h>
+//#include <Fonts/FreeMono9pt7b.h>
 #include "logo.h"
 #include "pinDefines.h"
 #include "Global.h"

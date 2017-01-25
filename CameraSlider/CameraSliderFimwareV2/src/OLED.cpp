@@ -13,6 +13,13 @@ void OLED_Init(){
   //Set the font
   //display.setFont(&FreeMono9pt7b);
 
+  // text display tests
+  display.setTextSize(2); 
+  display.setTextColor(WHITE);
+  display.setCursor(0,12);
+  display.println("Hello, world!");
+  display.display();
+
   // Show image buffer on the display hardware.
   // Since the buffer is intialized with an Adafruit splashscreen
   // internally, this will display the splashscreen.

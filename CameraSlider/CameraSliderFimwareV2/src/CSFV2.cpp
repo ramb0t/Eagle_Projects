@@ -8,13 +8,14 @@
 // #include <SPI.h>
 // #include <Wire.h>
 // #include <Adafruit_GFX.h>
-// #include <Adafruit_SSD1306.h>
+#include <Adafruit_SSD1306.h>
 // #include <Fonts/FreeMono9pt7b.h>
 #include "pinDefines.h"
 #include "Timer1.h"
 #include "Global.h"
 #include "Encoder.h"
 #include "OLED.h"
+
 
 // Defines
 /*****************************************************************************/
@@ -62,8 +63,8 @@
 
 #define tickerMax 125
 
-#define STEP_DELAY  50
-#define CALIB_SPEED 10
+#define STEP_DELAY  10
+#define CALIB_SPEED 20
 
 // Variable declarations
 /******************************************************************************/
@@ -250,134 +251,134 @@ void loop() {
 //calibrate the extents
 void calibrate(){
   // Tell the user what we are doing
-  // display.clearDisplay();
-  // display.setTextSize(1);
-  // display.setCursor(0,1);
-  // display.print("Calibrating... ");
-  // display.setTextSize(2);
-  // display.display();
-  //
-  // // Check that we are not on the endstops
-  // change_direction(FORWARD);
-  // while(digitalRead(EMIN)){
-  //   // make a step
-  //   digitalWrite(SSTP, HIGH);
-  //   digitalWrite(SSTP, LOW);
-  //   delay(STEP_DELAY);
-  // }
-  // change_direction(BACKWARD);
-  // while(digitalRead(EMAX)){
-  //   // make a step
-  //   digitalWrite(SSTP, HIGH);
-  //   digitalWrite(SSTP, LOW);
-  //   delay(STEP_DELAY);
-  // }
-  //
-  // MIN_FLAG = false;
-  // MAX_FLAG = false;
-  //
-  // // move to min endstop first
-  // change_direction(BACKWARD);
-  // set_speed(CALIB_SPEED);
-  // running = true;
-  // status = C_INIT;
-  //
-  // while(!MIN_FLAG && !MAX_FLAG){
-  //   // wait
-  // }
-  // if(MAX_FLAG){
-  //   emergency_stop();
-  //   Serial.println("Error hit Max");
-  //   //TODO: error checking
-  // }else{ // min endstop
-  //   running = false;
-  // }
-  // status = C_HMIN;
-  // change_direction(FORWARD);
-  // while(digitalRead(EMIN)){
-  //   // make a step
-  //   digitalWrite(SSTP, HIGH);
-  //   digitalWrite(SSTP, LOW);
-  //   delay(STEP_DELAY);
-  // }
-  //
-  // // reset flags
-  // MAX_FLAG = false;
-  // MIN_FLAG = false;
-  //
-  // // move to max Endstop
-  // change_direction(FORWARD);
-  // set_speed(CALIB_SPEED);
-  // running = true;
-  // status = C_GMAX;
-  //
-  // while(!MIN_FLAG && !MAX_FLAG){
-  //   // wait
-  // }
-  // if(MIN_FLAG){
-  //   emergency_stop();
-  //   Serial.println("Error hit Min");
-  //   //TODO: error checking
-  // }else{ // min endstop
-  //   running = false;
-  // }
-  // status = C_HMAX;
-  // display.setCursor(0,21);
-  // display.print("Max Hit... ");
-  // display.display();
-  // // endstop retract:
-  // change_direction(BACKWARD);
-  // while(digitalRead(EMAX)){
-  //   // make a step
-  //   digitalWrite(SSTP, HIGH);
-  //   digitalWrite(SSTP, LOW);
-  //   delay(STEP_DELAY);
-  // }
-  //
-  // MAX_FLAG = false;
-  // MIN_FLAG = false;
-  // status = C_GMIN;
-  //
-  //
-  // // reset step counter
-  // step_count = 0;
-  //
-  // // move to minimum Endstop
-  // change_direction(BACKWARD);
-  // set_speed(CALIB_SPEED);
-  // running = true;
-  //
-  // while(!MIN_FLAG && !MAX_FLAG){
-  //   // wait
-  // }
-  // if(MAX_FLAG){
-  //   emergency_stop();
-  //   Serial.println("Error hit Max");
-  //   //TODO: error checking
-  // }else{ // min endstop
-  //   running = false;
-  // }
-  // MAX_FLAG = false;
-  // MIN_FLAG = false;
-  // change_direction(FORWARD);
-  // status = C_FIN;
-  // display.setCursor(0,41);
-  // display.print("Min Hit... ");
-  // display.display();
-  //
-  // delay(2000);
-  //
-  // // store steps counted
-  // calibration_steps = step_count;
-  // display.clearDisplay();
-  // display.setCursor(0,1);
-  // display.print("Steps: ");
-  // display.setCursor(0,21);
-  // display.print(calibration_steps);
-  // display.display();
-  // status = C_DONE;
-  //
-  // delay(10000);
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setCursor(0,1);
+  display.print("Calibrating... ");
+  display.setTextSize(2);
+  display.display();
+
+  // Check that we are not on the endstops
+  change_direction(FORWARD);
+  while(digitalRead(EMIN)){
+    // make a step
+    digitalWrite(SSTP, HIGH);
+    digitalWrite(SSTP, LOW);
+    delay(STEP_DELAY);
+  }
+  change_direction(BACKWARD);
+  while(digitalRead(EMAX)){
+    // make a step
+    digitalWrite(SSTP, HIGH);
+    digitalWrite(SSTP, LOW);
+    delay(STEP_DELAY);
+  }
+
+  MIN_FLAG = false;
+  MAX_FLAG = false;
+
+  // move to min endstop first
+  change_direction(BACKWARD);
+  set_speed(CALIB_SPEED);
+  running = true;
+  status = C_INIT;
+
+  while(!MIN_FLAG && !MAX_FLAG){
+    // wait
+  }
+  if(MAX_FLAG){
+    emergency_stop();
+    Serial.println("Error hit Max");
+    //TODO: error checking
+  }else{ // min endstop
+    running = false;
+  }
+  status = C_HMIN;
+  change_direction(FORWARD);
+  while(digitalRead(EMIN)){
+    // make a step
+    digitalWrite(SSTP, HIGH);
+    digitalWrite(SSTP, LOW);
+    delay(STEP_DELAY);
+  }
+
+  // reset flags
+  MAX_FLAG = false;
+  MIN_FLAG = false;
+
+  // move to max Endstop
+  change_direction(FORWARD);
+  set_speed(CALIB_SPEED);
+  running = true;
+  status = C_GMAX;
+
+  while(!MIN_FLAG && !MAX_FLAG){
+    // wait
+  }
+  if(MIN_FLAG){
+    emergency_stop();
+    Serial.println("Error hit Min");
+    //TODO: error checking
+  }else{ // min endstop
+    running = false;
+  }
+  status = C_HMAX;
+  display.setCursor(0,21);
+  display.print("Max Hit... ");
+  display.display();
+  // endstop retract:
+  change_direction(BACKWARD);
+  while(digitalRead(EMAX)){
+    // make a step
+    digitalWrite(SSTP, HIGH);
+    digitalWrite(SSTP, LOW);
+    delay(STEP_DELAY);
+  }
+
+  MAX_FLAG = false;
+  MIN_FLAG = false;
+  status = C_GMIN;
+
+
+  // reset step counter
+  step_count = 0;
+
+  // move to minimum Endstop
+  change_direction(BACKWARD);
+  set_speed(CALIB_SPEED);
+  running = true;
+
+  while(!MIN_FLAG && !MAX_FLAG){
+    // wait
+  }
+  if(MAX_FLAG){
+    emergency_stop();
+    Serial.println("Error hit Max");
+    //TODO: error checking
+  }else{ // min endstop
+    running = false;
+  }
+  MAX_FLAG = false;
+  MIN_FLAG = false;
+  change_direction(FORWARD);
+  status = C_FIN;
+  display.setCursor(0,41);
+  display.print("Min Hit... ");
+  display.display();
+
+  delay(2000);
+
+  // store steps counted
+  calibration_steps = step_count;
+  display.clearDisplay();
+  display.setCursor(0,1);
+  display.print("Steps: ");
+  display.setCursor(0,21);
+  display.print(calibration_steps);
+  display.display();
+  status = C_DONE;
+
+  delay(10000);
 }
 
 // read buttons connected to a single analog pin
