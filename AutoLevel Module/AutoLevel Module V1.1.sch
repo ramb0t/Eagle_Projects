@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.3.0">
+<eagle version="8.0.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -5253,6 +5253,69 @@ chip</description>
 <rectangle x1="1.65" y1="4.45" x2="3.45" y2="4.55" layer="21"/>
 <rectangle x1="1.95" y1="4.55" x2="3.15" y2="4.65" layer="21"/>
 </package>
+<package name="SHROOM_BS">
+<rectangle x1="1.35" y1="-0.05" x2="3.05" y2="0.05" layer="25"/>
+<rectangle x1="1.35" y1="0.05" x2="3.15" y2="0.15" layer="25"/>
+<rectangle x1="1.35" y1="0.15" x2="3.15" y2="0.25" layer="25"/>
+<rectangle x1="1.45" y1="0.25" x2="3.15" y2="0.35" layer="25"/>
+<rectangle x1="1.55" y1="0.35" x2="3.15" y2="0.45" layer="25"/>
+<rectangle x1="1.55" y1="0.45" x2="3.15" y2="0.55" layer="25"/>
+<rectangle x1="1.65" y1="0.55" x2="3.25" y2="0.65" layer="25"/>
+<rectangle x1="1.65" y1="0.65" x2="3.25" y2="0.75" layer="25"/>
+<rectangle x1="1.65" y1="0.75" x2="3.25" y2="0.85" layer="25"/>
+<rectangle x1="1.75" y1="0.85" x2="3.25" y2="0.95" layer="25"/>
+<rectangle x1="1.75" y1="0.95" x2="3.25" y2="1.05" layer="25"/>
+<rectangle x1="1.75" y1="1.05" x2="3.25" y2="1.15" layer="25"/>
+<rectangle x1="1.75" y1="1.15" x2="3.25" y2="1.25" layer="25"/>
+<rectangle x1="1.75" y1="1.25" x2="3.25" y2="1.35" layer="25"/>
+<rectangle x1="1.85" y1="1.35" x2="3.15" y2="1.45" layer="25"/>
+<rectangle x1="1.85" y1="1.45" x2="3.15" y2="1.55" layer="25"/>
+<rectangle x1="1.85" y1="1.55" x2="3.15" y2="1.65" layer="25"/>
+<rectangle x1="1.85" y1="1.65" x2="3.15" y2="1.75" layer="25"/>
+<rectangle x1="1.85" y1="1.75" x2="3.15" y2="1.85" layer="25"/>
+<rectangle x1="1.85" y1="1.85" x2="3.15" y2="1.95" layer="25"/>
+<rectangle x1="2.35" y1="1.95" x2="3.15" y2="2.05" layer="25"/>
+<rectangle x1="0.35" y1="2.35" x2="2.75" y2="2.45" layer="25"/>
+<rectangle x1="0.15" y1="2.45" x2="3.55" y2="2.55" layer="25"/>
+<rectangle x1="0.05" y1="2.55" x2="3.95" y2="2.65" layer="25"/>
+<rectangle x1="0.05" y1="2.65" x2="0.65" y2="2.75" layer="25"/>
+<rectangle x1="0.75" y1="2.65" x2="4.25" y2="2.75" layer="25"/>
+<rectangle x1="-0.05" y1="2.75" x2="0.35" y2="2.85" layer="25"/>
+<rectangle x1="0.85" y1="2.75" x2="4.45" y2="2.85" layer="25"/>
+<rectangle x1="0.05" y1="2.85" x2="0.45" y2="2.95" layer="25"/>
+<rectangle x1="0.85" y1="2.85" x2="4.55" y2="2.95" layer="25"/>
+<rectangle x1="0.05" y1="2.95" x2="0.45" y2="3.05" layer="25"/>
+<rectangle x1="0.85" y1="2.95" x2="4.65" y2="3.05" layer="25"/>
+<rectangle x1="0.05" y1="3.05" x2="0.45" y2="3.15" layer="25"/>
+<rectangle x1="0.95" y1="3.05" x2="4.65" y2="3.15" layer="25"/>
+<rectangle x1="0.05" y1="3.15" x2="0.55" y2="3.25" layer="25"/>
+<rectangle x1="0.95" y1="3.15" x2="4.65" y2="3.25" layer="25"/>
+<rectangle x1="0.15" y1="3.25" x2="0.55" y2="3.35" layer="25"/>
+<rectangle x1="0.95" y1="3.25" x2="4.65" y2="3.35" layer="25"/>
+<rectangle x1="0.15" y1="3.35" x2="0.65" y2="3.45" layer="25"/>
+<rectangle x1="1.05" y1="3.35" x2="4.65" y2="3.45" layer="25"/>
+<rectangle x1="0.25" y1="3.45" x2="0.75" y2="3.55" layer="25"/>
+<rectangle x1="1.05" y1="3.45" x2="4.65" y2="3.55" layer="25"/>
+<rectangle x1="0.35" y1="3.55" x2="0.85" y2="3.65" layer="25"/>
+<rectangle x1="1.15" y1="3.55" x2="4.65" y2="3.65" layer="25"/>
+<rectangle x1="0.45" y1="3.65" x2="0.85" y2="3.75" layer="25"/>
+<rectangle x1="1.25" y1="3.65" x2="4.55" y2="3.75" layer="25"/>
+<rectangle x1="0.55" y1="3.75" x2="0.95" y2="3.85" layer="25"/>
+<rectangle x1="1.25" y1="3.75" x2="4.55" y2="3.85" layer="25"/>
+<rectangle x1="0.55" y1="3.85" x2="1.05" y2="3.95" layer="25"/>
+<rectangle x1="1.35" y1="3.85" x2="4.45" y2="3.95" layer="25"/>
+<rectangle x1="0.75" y1="3.95" x2="1.25" y2="4.05" layer="25"/>
+<rectangle x1="1.45" y1="3.95" x2="4.35" y2="4.05" layer="25"/>
+<rectangle x1="0.85" y1="4.05" x2="1.35" y2="4.15" layer="25"/>
+<rectangle x1="1.65" y1="4.05" x2="4.25" y2="4.15" layer="25"/>
+<rectangle x1="0.95" y1="4.15" x2="1.55" y2="4.25" layer="25"/>
+<rectangle x1="1.75" y1="4.15" x2="4.15" y2="4.25" layer="25"/>
+<rectangle x1="1.15" y1="4.25" x2="1.65" y2="4.35" layer="25"/>
+<rectangle x1="1.85" y1="4.25" x2="3.95" y2="4.35" layer="25"/>
+<rectangle x1="1.35" y1="4.35" x2="3.75" y2="4.45" layer="25"/>
+<rectangle x1="1.55" y1="4.45" x2="3.55" y2="4.55" layer="25"/>
+<rectangle x1="1.85" y1="4.55" x2="3.25" y2="4.65" layer="25"/>
+</package>
 </packages>
 <symbols>
 <symbol name="SHROOM">
@@ -5352,6 +5415,11 @@ chip</description>
 <technology name=""/>
 </technologies>
 </device>
+<device name="BOTTOMSILK" package="SHROOM_BS">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
 </devices>
 </deviceset>
 </devicesets>
@@ -5386,6 +5454,7 @@ chip</description>
 <part name="JP3" library="pinhead" deviceset="PINHD-1X2" device=""/>
 <part name="JP6" library="pinhead" deviceset="PINHD-1X2" device=""/>
 <part name="U$1" library="RobThePyro" deviceset="SHROOM" device="5MM"/>
+<part name="U$2" library="RobThePyro" deviceset="SHROOM" device="BOTTOMSILK"/>
 </parts>
 <sheets>
 <sheet>
@@ -5412,6 +5481,7 @@ chip</description>
 <instance part="JP3" gate="G$1" x="116.84" y="129.54"/>
 <instance part="JP6" gate="G$1" x="127" y="129.54"/>
 <instance part="U$1" gate="G$1" x="68.58" y="93.98"/>
+<instance part="U$2" gate="G$1" x="55.88" y="91.44"/>
 </instances>
 <busses>
 </busses>
