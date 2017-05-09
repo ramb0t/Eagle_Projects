@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="8.1.1">
+<eagle version="7.3.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -8,11 +8,11 @@
 </settings>
 <grid distance="0.2" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top-Supply" color="11" fill="1" visible="yes" active="yes"/>
-<layer number="2" name="Top-LowHeat" color="4" fill="1" visible="yes" active="yes"/>
-<layer number="3" name="Top-MedHeat" color="12" fill="1" visible="yes" active="yes"/>
-<layer number="4" name="Top-HighHeat" color="6" fill="1" visible="yes" active="yes"/>
-<layer number="5" name="Leveling" color="10" fill="1" visible="yes" active="yes"/>
+<layer number="1" name="Top-Supply" color="11" fill="1" visible="no" active="yes"/>
+<layer number="2" name="Top-LowHeat" color="4" fill="1" visible="no" active="yes"/>
+<layer number="3" name="Top-MedHeat" color="12" fill="1" visible="no" active="yes"/>
+<layer number="4" name="Top-HighHeat" color="6" fill="1" visible="no" active="yes"/>
+<layer number="5" name="Leveling" color="10" fill="1" visible="no" active="yes"/>
 <layer number="6" name="Route6" color="1" fill="8" visible="no" active="no"/>
 <layer number="7" name="Route7" color="4" fill="8" visible="no" active="no"/>
 <layer number="8" name="Route8" color="1" fill="2" visible="no" active="no"/>
@@ -23,42 +23,42 @@
 <layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
 <layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
 <layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
-<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="29" name="smt" color="15" fill="3" visible="yes" active="yes"/>
-<layer number="30" name="smb" color="15" fill="6" visible="yes" active="yes"/>
-<layer number="31" name="tCream" color="7" fill="4" visible="yes" active="yes"/>
-<layer number="32" name="bCream" color="7" fill="5" visible="yes" active="yes"/>
-<layer number="33" name="tFinish" color="6" fill="3" visible="yes" active="yes"/>
-<layer number="34" name="bFinish" color="6" fill="6" visible="yes" active="yes"/>
-<layer number="35" name="tGlue" color="7" fill="4" visible="yes" active="yes"/>
-<layer number="36" name="bGlue" color="7" fill="5" visible="yes" active="yes"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
-<layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="no" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="no" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="29" name="smt" color="15" fill="3" visible="no" active="yes"/>
+<layer number="30" name="smb" color="15" fill="6" visible="no" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="45" name="npth" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="no" active="no"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="no" active="no"/>
 <layer number="93" name="Pins" color="2" fill="1" visible="no" active="no"/>
@@ -67,16 +67,16 @@
 <layer number="96" name="Values" color="7" fill="1" visible="no" active="no"/>
 <layer number="97" name="Info" color="7" fill="1" visible="no" active="no"/>
 <layer number="98" name="Guide" color="6" fill="1" visible="no" active="no"/>
-<layer number="100" name="LowHEATArea" color="11" fill="7" visible="yes" active="yes"/>
-<layer number="101" name="UltraLowHeatArea" color="14" fill="11" visible="yes" active="yes"/>
-<layer number="102" name="PrintArea" color="9" fill="12" visible="yes" active="yes"/>
-<layer number="103" name="plb" color="10" fill="1" visible="yes" active="yes"/>
-<layer number="104" name="PC-foil" color="11" fill="1" visible="yes" active="yes"/>
-<layer number="105" name="dims" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="120" name="mill" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="140" name="plt" color="13" fill="1" visible="yes" active="yes"/>
-<layer number="200" name="Original" color="13" fill="1" visible="yes" active="yes"/>
-<layer number="201" name="201bmp" color="13" fill="1" visible="yes" active="yes"/>
+<layer number="100" name="LowHEATArea" color="11" fill="7" visible="no" active="yes"/>
+<layer number="101" name="UltraLowHeatArea" color="14" fill="11" visible="no" active="yes"/>
+<layer number="102" name="PrintArea" color="9" fill="12" visible="no" active="yes"/>
+<layer number="103" name="plb" color="10" fill="1" visible="no" active="yes"/>
+<layer number="104" name="PC-foil" color="11" fill="1" visible="no" active="yes"/>
+<layer number="105" name="dims" color="7" fill="1" visible="no" active="yes"/>
+<layer number="120" name="mill" color="7" fill="1" visible="no" active="yes"/>
+<layer number="140" name="plt" color="13" fill="1" visible="no" active="yes"/>
+<layer number="200" name="Original" color="13" fill="1" visible="no" active="yes"/>
+<layer number="201" name="201bmp" color="13" fill="1" visible="no" active="yes"/>
 </layers>
 <board>
 <plain>
@@ -154,10 +154,10 @@
 <hole x="209" y="0" drill="3.2"/>
 <hole x="209" y="209" drill="3.2"/>
 <hole x="0" y="209" drill="3.2"/>
-<hole x="0" y="0" drill="6"/>
-<hole x="209" y="0" drill="6"/>
-<hole x="209" y="209" drill="6"/>
-<hole x="0" y="209" drill="6"/>
+<hole x="0" y="0" drill="3.2"/>
+<hole x="209" y="0" drill="3.2"/>
+<hole x="209" y="209" drill="3.2"/>
+<hole x="0" y="209" drill="3.2"/>
 <dimension x1="-24" y1="-6" x2="230" y2="-6" x3="103" y3="-17.4" textsize="1.778" layer="48" dtype="horizontal"/>
 <wire x1="28" y1="209.4" x2="78" y2="209.4" width="0.4064" layer="140"/>
 <wire x1="128" y1="209.4" x2="178" y2="209.4" width="0.4064" layer="140"/>
@@ -280,8 +280,8 @@
 <circle x="115" y="6.4" radius="4" width="0" layer="5"/>
 <circle x="115" y="104.4" radius="4" width="0" layer="5"/>
 <circle x="115" y="202.4" radius="4" width="0" layer="5"/>
-<hole x="104.5" y="83.5" drill="6"/>
-<hole x="104.5" y="124.5" drill="6"/>
+<hole x="104.5" y="83.5" drill="3.2"/>
+<hole x="104.5" y="124.5" drill="3.2"/>
 <wire x1="16.8" y1="6.4" x2="13" y2="10.2" width="0.3" layer="140" style="shortdash" curve="90"/>
 <wire x1="13" y1="10.2" x2="9.2" y2="6.4" width="0.3" layer="140" style="shortdash" curve="90"/>
 <wire x1="9.2" y1="6.4" x2="13" y2="2.6" width="0.3" layer="140" style="shortdash" curve="90"/>
@@ -12568,7 +12568,6 @@
 <wire x1="82.4" y1="104.4" x2="86.2" y2="100.6" width="0.3" layer="103" style="shortdash" curve="90"/>
 <wire x1="86.2" y1="100.6" x2="90" y2="104.4" width="0.3" layer="103" style="shortdash" curve="90"/>
 <dimension x1="-19" y1="239.4" x2="8" y2="239.4" x3="-5.5" y3="225" textsize="1.778" layer="16"/>
-<dimension x1="-20" y1="225" x2="-20" y2="239.4" x3="-37.8" y3="232.2" textsize="1.778" layer="1"/>
 </plain>
 <libraries>
 <library name="led">
