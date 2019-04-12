@@ -12261,28 +12261,31 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="297.18" y="119.38" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$31" class="0">
+<net name="ADR0" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="A0"/>
 <pinref part="JP6" gate="G$1" pin="2"/>
 <wire x1="309.88" y1="198.12" x2="266.7" y2="198.12" width="0.1524" layer="91"/>
 <wire x1="266.7" y1="198.12" x2="266.7" y2="193.04" width="0.1524" layer="91"/>
+<label x="266.7" y="195.58" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$33" class="0">
+<net name="ADR1" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="A1"/>
 <pinref part="JP4" gate="G$1" pin="2"/>
 <wire x1="309.88" y1="195.58" x2="281.94" y2="195.58" width="0.1524" layer="91"/>
 <wire x1="281.94" y1="195.58" x2="281.94" y2="185.42" width="0.1524" layer="91"/>
+<label x="281.94" y="193.04" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$34" class="0">
+<net name="ADR2" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="A2"/>
 <pinref part="JP5" gate="G$1" pin="2"/>
 <wire x1="309.88" y1="193.04" x2="297.18" y2="193.04" width="0.1524" layer="91"/>
 <wire x1="297.18" y1="193.04" x2="297.18" y2="177.8" width="0.1524" layer="91"/>
+<label x="297.18" y="190.5" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="INTB" class="0">
